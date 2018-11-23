@@ -13,7 +13,7 @@ let corsOptions = {
 app.use(cors());
 
 let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
+let neo4jRouter = require('./routes/neo4j');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -22,17 +22,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/test', neo4jRouter);
 
-app.use('/fill', usersRouter);
+app.use('/recommendation', neo4jRouter);
 
-app.use('/recommendation', usersRouter);
+app.use('/like', neo4jRouter);
 
-app.use('/like', usersRouter);
+app.use('/view', neo4jRouter);
 
-app.use('/view', usersRouter);
-
-app.use('/purchase', usersRouter);
+app.use('/purchase', neo4jRouter);
 
 
 

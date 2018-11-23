@@ -9,9 +9,17 @@
           edit
         </v-icon>
 
-        <v-btn @click="sendReq">
-          send
+        <v-btn block @click="getTest">
+          Get neo4j data
         </v-btn>
+      </v-flex>
+
+      <v-flex sx12>
+        <ul>
+          <li v-for="(item, i) in neo" :key="i">
+              {{item._fields[0].properties.name || 'name'}}
+          </li>
+        </ul>
       </v-flex>
 
     </v-layout>
@@ -19,15 +27,22 @@
 </template>
 
 <script>
-  import send from '@/api';
+  import {send, getTest} from '@/api';
 
   export default {
     data: () => ({
+        neo: [],
     }),
       methods: {
-        sendReq() {
-            send();
-        }
+          getTest() {
+              getTest()
+                  .then((response) => {
+                      this.neo = [];
+                      this.neo.push(...response.data);
+                      console.log('NEO: ', this.neo);
+                  })
+                  .catch(console.error);
+          },
       }
   }
 </script>
