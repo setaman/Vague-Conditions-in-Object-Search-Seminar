@@ -1,9 +1,9 @@
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
 
-const credentials = require('./credentials');
+const credentials = require('../creds');
 
-var client = new recombee.ApiClient(credentials.db, credentials.token);
+var client = new recombee.ApiClient(credentials.recommbe_db, credentials.recommbe_token);
 const NUM = 100;
 
 // We will use computers as items in this example
