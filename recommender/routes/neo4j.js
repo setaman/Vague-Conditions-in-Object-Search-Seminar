@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-let neo4j = require('../neo4j/api');
+let neo4j = require('../lib/neo4j');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

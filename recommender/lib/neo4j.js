@@ -9,10 +9,11 @@ module.exports.getTest = (req, res) => {
     session
         .run('MATCH(n) RETURN n')
         .then(result => {
-            res.status(200).type('application/json').send(result);
+            res.status(200).type('application/json').send(result.records);
         })
-        .catch(console.error)
-        .finally(()=> {
-            res.send('HELLO');
+        .catch((err) => {
+            console.error(err);
+            res.status(500).type('application/json').send({err});
         })
+        .finally(()=>session.close())
 };
