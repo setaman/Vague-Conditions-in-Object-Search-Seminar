@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
+    "axios": "^0.18.0",
     "cls-bluebird": "^2.1.0",
     "material-design-icons-iconfont": "^4.0.2",
     "recombee-api-client": "^2.2.0",

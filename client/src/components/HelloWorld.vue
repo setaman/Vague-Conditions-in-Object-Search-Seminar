@@ -8,6 +8,10 @@
         <v-icon>
           edit
         </v-icon>
+
+        <v-btn @click="sendReq">
+          send
+        </v-btn>
       </v-flex>
 
     </v-layout>
@@ -15,9 +19,16 @@
 </template>
 
 <script>
+  import send from '@/api';
+
   export default {
     data: () => ({
-    })
+    }),
+      methods: {
+        sendReq() {
+            send();
+        }
+      }
   }
 </script>
 
