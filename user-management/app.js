@@ -28,13 +28,13 @@ client.connect(function (err) {
     } else {
         log.info('mongo', 'Connected successful to server');
         db = client.db(dbName);
-        client.close();
+        //client.close();
     }
 });
 
 passport.use('signup', new LocalStrategy({
-        usernameField : 'name',
-        passwordField : 'password',
+        usernameField: 'name',
+        passwordField: 'password',
     },
     async (name, password, done) => {
         log.info('signup', {name});
@@ -64,25 +64,43 @@ passport.use('signup', new LocalStrategy({
 ));
 
 passport.use('login', new LocalStrategy({
-        usernameField : 'name',
-        passwordField : 'password',
+        usernameField: 'name',
+        passwordField: 'password',
     },
-    async (name, password, done) => {
-        let user;
-        try {
-            user = await db.collection('users').findOne({name});
-            console.log({user});
+    (name, password, done) => {
+
+        db.collection('users').findOne({name}, (err, user) => {
+            log.info('login strategy db', {user});
+            if (err) {
+                return done(null, false, {message: 'Error occurred'});
+            }
             if (!user) {
-                console.log(user);
+                log.warn('login strategy', 'user not found');
+                return done(null, false, {message: 'User not found'});
+            }
+            if (user.password !== password) {
+                log.warn('login strategy', 'Incorrect password');
+                return done(null, false, {message: 'Incorrect password.'});
+            }
+            return done(null, user, {message: 'Logged in Successfully'});
+        })
+        /*let user;
+        try {
+            log.info('login strategy', {name});
+            user = await db.collection('users').findOne({name});
+            log.info('login strategy db', {user});
+            if (!user) {
+                log.warn('login strategy', 'user not found');
                 return done(null, false, {message: 'User not found'});
             }
             if (!user.password !== passport) {
+                log.warn('login strategy', 'Incorrect password');
                 return done(null, false, {message: 'Incorrect password.'});
             }
             return done(null, user, { message : 'Logged in Successfully'});
         } catch (e) {
             return done(null, false, {message: e});
-        }
+        }*/
     }
 ));
 
@@ -92,6 +110,8 @@ passport.use(new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     },
     (jwt_payload, done) => {
+
+        log.info('JWT strategy', jwt_payload);
 
         db.findOne({name: jwt_payload.name}, (err, user) => {
             if (err) {
@@ -129,6 +149,18 @@ app.post('/verify', passport.authenticate('jwt', {session: false}, (req, res) =>
     })
 );
 
+app.post('/add', async (req, res) => {
+    try {
+        let user = await db.collection('users').insertOne(req.body.user);
+        res.send({
+            massage: 'DONE',
+            user
+        })
+    } catch (e) {
+        log.error('add route', e);
+        res.status(500).send(e);
+    }
+});
 
 //Handle errors
 app.use(function (err, req, res, next) {

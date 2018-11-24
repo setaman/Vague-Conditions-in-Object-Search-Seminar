@@ -12,15 +12,16 @@ router.post('/login', async (req, res, next) => {
     passport.authenticate('login',
         async (err, user) => {
 
-            if (err) {
-                const error = new Error('An Error occurred');
-                log.error('LOGIN router', err);
-                return next(error);
+            if (err || !user) {
+                log.error('LOGIN router', 'Name or Password incorrect');
+                return next('Name or Password incorrect');
             }
 
             req.login(user, {session: false}, async (err) => {
+                log.info('LOGIN router login', {user});
+
                 if (err) {
-                    log.error('LOGIN router', err);
+                    log.error('LOGIN router login', 'something wrong');
                     return next(err);
                 }
                 const token = jwt.sign({name: user.name, _id: user._id}, 'secret');
