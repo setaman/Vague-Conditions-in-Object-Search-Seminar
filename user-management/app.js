@@ -37,7 +37,7 @@ passport.use('signup', new LocalStrategy({
         passwordField : 'password',
     },
     async (name, password, done) => {
-        log.info('LOGIN', {name});
+        log.info('signup', {name});
         let user;
         try {
             user = await db.collection('users').findOne({name});
@@ -62,6 +62,30 @@ passport.use('signup', new LocalStrategy({
         }
     }
 ));
+
+passport.use('login', new LocalStrategy({
+        usernameField : 'name',
+        passwordField : 'password',
+    },
+    async (name, password, done) => {
+        let user;
+        try {
+            user = await db.collection('users').findOne({name});
+            console.log({user});
+            if (!user) {
+                console.log(user);
+                return done(null, false, {message: 'User not found'});
+            }
+            if (!user.password !== passport) {
+                return done(null, false, {message: 'Incorrect password.'});
+            }
+            return done(null, user, { message : 'Logged in Successfully'});
+        } catch (e) {
+            return done(null, false, {message: e});
+        }
+    }
+));
+
 
 passport.use(new JwtStrategy({
         secretOrKey: 'secret',

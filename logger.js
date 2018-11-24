@@ -21,7 +21,7 @@ const log = {
     },
 };
 
-function normalizeText(text) {
+function normalizeText(text = '') {
     let temp_text = text;
     if (typeof text === 'object') {
         try {

@@ -9,26 +9,23 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/login', async (req, res, next) => {
-    console.log('LOGIN');
-    passport.authenticate('local',
+    passport.authenticate('login',
         async (err, user) => {
+
             if (err) {
                 const error = new Error('An Error occurred');
-                return next(error);
-            }
-            if (!user) {
-                const error = new Error('User ' + req.body.name + ' not found');
+                log.error('LOGIN router', err);
                 return next(error);
             }
 
-            req.login(user, {session: false}, async (error) => {
-                if (error) return next(error);
-
-                const token = jwt.sign({name: user.name, _id: user._id}, 'secrettt');
-
+            req.login(user, {session: false}, async (err) => {
+                if (err) {
+                    log.error('LOGIN router', err);
+                    return next(err);
+                }
+                const token = jwt.sign({name: user.name, _id: user._id}, 'secret');
                 return res.json({token});
             })
-
         })(req, res, next);
 });
 
