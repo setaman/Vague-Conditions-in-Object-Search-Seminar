@@ -32,7 +32,7 @@ client.connect(function (err) {
     }
 });
 
-passport.use('signup', new LocalStrategy({
+/*passport.use('signup', new LocalStrategy({
         usernameField: 'name',
         passwordField: 'password',
     },
@@ -61,7 +61,34 @@ passport.use('signup', new LocalStrategy({
             return done(null, false, {message: e});
         }
     }
+));*/
+
+passport.use('signup', new LocalStrategy({
+        usernameField: 'name',
+        passwordField: 'password',
+    },
+    (name, password, done) => {
+
+        db.collection('users').findOne({name}, (err, user) => {
+            if (err) {
+                return done(null, false, {message: 'Error occurred'});
+            }
+            if (user) {
+                log.warn('login strategy', 'user already exist');
+                return done(null, false, {message: 'user already exist'});
+            }
+
+            db.collection('users').insertOne({name, password}, (err, result) => {
+                if (err) {
+                    log.error('login strategy insert', 'some error while inserting user');
+                    return done(null, false, {message: 'some error while inserting user'});
+                }
+                return done(null, result, {message: 'Created in Successfully'});
+            });
+        })
+    }
 ));
+
 
 passport.use('login', new LocalStrategy({
         usernameField: 'name',
@@ -84,23 +111,6 @@ passport.use('login', new LocalStrategy({
             }
             return done(null, user, {message: 'Logged in Successfully'});
         })
-        /*let user;
-        try {
-            log.info('login strategy', {name});
-            user = await db.collection('users').findOne({name});
-            log.info('login strategy db', {user});
-            if (!user) {
-                log.warn('login strategy', 'user not found');
-                return done(null, false, {message: 'User not found'});
-            }
-            if (!user.password !== passport) {
-                log.warn('login strategy', 'Incorrect password');
-                return done(null, false, {message: 'Incorrect password.'});
-            }
-            return done(null, user, { message : 'Logged in Successfully'});
-        } catch (e) {
-            return done(null, false, {message: e});
-        }*/
     }
 ));
 
