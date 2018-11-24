@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 let logger = require('morgan');
 let cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const log = require('../logger');
 
 let passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
@@ -25,15 +26,18 @@ client.connect(function (err) {
     if (err) {
         console.error('Can not connect to db:', err);
     } else {
-        console.log("Connected successful to server");
+        log.info('mongo', 'Connected successful to server');
         db = client.db(dbName);
         client.close();
     }
 });
 
-passport.use('signup', new LocalStrategy(
+passport.use('signup', new LocalStrategy({
+        usernameField : 'name',
+        passwordField : 'password',
+    },
     async (username, password, done) => {
-        console.log(username);
+        console.log({username});
         let user;
         try {
             user = await db.collection('users').findOne({username});
@@ -47,7 +51,8 @@ passport.use('signup', new LocalStrategy(
         }
 
         try {
-            user = await db.collection('users').insertOne({username, password});
+            console.log({user});
+            user = await db.collection('users').insertOne({username, password})
             if (!user) {
                 return done(null, false, {message: 'Some Error occurred while inserting new user.'});
             }

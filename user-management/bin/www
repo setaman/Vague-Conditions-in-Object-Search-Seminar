@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('user-management:server');
 var http = require('http');
+const log = require('../../logger');
 
 const chalk = require('chalk');
 
@@ -89,5 +90,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log( chalk.blue('[ USER-MANAGEMENT ] ist listening on port', port));
+  log.info('USER-MANAGEMENT', 'ist listening on port ' + port);
 }
