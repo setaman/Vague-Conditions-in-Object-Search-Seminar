@@ -24,7 +24,7 @@ const client = new MongoClient('mongodb://localhost:27017/users', {useNewUrlPars
 client.connect(function (err) {
 
     if (err) {
-        console.error('Can not connect to db:', err);
+        log.info('mongo', 'Can not connect to db');
     } else {
         log.info('mongo', 'Connected successful to server');
         db = client.db(dbName);
@@ -36,11 +36,11 @@ passport.use('signup', new LocalStrategy({
         usernameField : 'name',
         passwordField : 'password',
     },
-    async (username, password, done) => {
-        console.log({username});
+    async (name, password, done) => {
+        log.info('LOGIN', {name});
         let user;
         try {
-            user = await db.collection('users').findOne({username});
+            user = await db.collection('users').findOne({name});
             console.log({user});
             if (user) {
                 console.log(user);
@@ -52,7 +52,7 @@ passport.use('signup', new LocalStrategy({
 
         try {
             console.log({user});
-            user = await db.collection('users').insertOne({username, password})
+            user = await db.collection('users').insertOne({username: name, password})
             if (!user) {
                 return done(null, false, {message: 'Some Error occurred while inserting new user.'});
             }
@@ -95,6 +95,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
