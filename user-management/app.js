@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 let logger = require('morgan');
 let cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
-const log = require('../logger');
+const log = require('./logger');
 
 let passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
@@ -16,11 +16,15 @@ let db;
 
 const dbName = 'usersDb';
 
-const client = new MongoClient('mongodb://localhost:27017/users', {useNewUrlParser: true});
+const client = new MongoClient('mongodb://localhost:27017/users', {
+    useNewUrlParser: true,
+    reconnectTries: 10,
+    reconnectInterval: 2000,
+});
 
 client.connect(function (err) {
     if (err) {
-        log.info('mongo', 'Can not connect to db');
+        log.error('mongo', 'Can not connect to db');
     } else {
         log.info('mongo', 'Connected successful to mongo!');
         db = client.db(dbName);

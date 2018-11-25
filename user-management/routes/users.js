@@ -2,7 +2,7 @@ let express = require('express');
 let router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const log = require('../../logger');
+const log = require('../logger');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
