@@ -126,34 +126,34 @@ router.post('/properties', async (req, res, next) => {
 router.post('/products', async (req, res, next) => {
     let requests = req.body.map((product) => {
 
+        let generated_item_values = {};
+        let generated_item_id = '';
+
         for (const prop in product) {
-            console.log(prop);
-            return new rqs.AddItemProperty(prop, properties_object[prop]);
+            if (prop.toLocaleLowerCase() === 'id' || prop.toLocaleLowerCase() === '_id'){
+                generated_item_id = product[prop];
+            }  else {
+                generated_item_values[prop] = product[prop];
+            }
         }
 
-        return new rqs.SetItemValues(
-            `computer-${i}`, //itemId
-            //values:
-            {
-                'price': 600 + 400 * Math.random(),
-                'num-cores': Math.floor(Math.random() * 8) + 1,
-                'description': 'Great computer',
-                'time': new Date().toISOString(),
-                'image': `http://examplesite.com/products/computer-${i}.jpg`
-            },
+        console.log(generated_item_id);
+        console.log(generated_item_values);
+
+        return new rqs.SetItemValues(generated_item_id, generated_item_values,
             //optional parameters:
             {
-                'cascadeCreate': true // Use cascadeCreate for creating item
-                // with given itemId, if it doesn't exist
+                'cascadeCreate': true // Use cascadeCreate for creating item with given itemId, if it doesn't exist
             }
         );
     });
     //Send catalog to the recommender system
-    return client.send(new rqs.Batch(requests));
-
-    await client.send(new rqs.Batch(requests));
-
-    res.render('index', { title: 'Express' });
+    try {
+        await client.send(new rqs.Batch(requests));
+        res.status(200).send('Products added!');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
 });
 
 module.exports = router;
