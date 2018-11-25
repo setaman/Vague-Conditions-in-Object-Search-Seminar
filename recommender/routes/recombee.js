@@ -1,0 +1,159 @@
+var recombee = require('recombee-api-client');
+var rqs = recombee.requests;
+
+var express = require('express');
+var router = express.Router();
+
+const credentials = require('../creds');
+
+var client = new recombee.ApiClient(credentials.recommbe_db, credentials.recommbe_token);
+const NUM = 100;
+
+// We will use computers as items in this example
+// Computers have four properties
+//   - price (floating point number)
+//   - number of processor cores (integer number)
+//   - description (string)
+//   - image (url of computer's photo)
+
+// Add properties of items
+
+function f() {
+    client.send(new rqs.Batch([
+        new rqs.AddItemProperty('price', 'double'),
+        new rqs.AddItemProperty('num-cores', 'int'),
+        new rqs.AddItemProperty('description', 'string'),
+        new rqs.AddItemProperty('time', 'timestamp'),
+        new rqs.AddItemProperty('image', 'image')
+    ]))
+        .then((responses) => {
+            return 0;
+            //Prepare requests for setting a catalog of computers
+
+            var requests = Array.apply(0, Array(NUM)).map((_, i) => {
+                return new rqs.SetItemValues(
+                    `computer-${i}`, //itemId
+                    //values:
+                    {
+                        'price': 600 + 400 * Math.random(),
+                        'num-cores': Math.floor(Math.random() * 8) + 1,
+                        'description': 'Great computer',
+                        'time': new Date().toISOString(),
+                        'image': `http://examplesite.com/products/computer-${i}.jpg`
+                    },
+                    //optional parameters:
+                    {
+                        'cascadeCreate': true // Use cascadeCreate for creating item
+                        // with given itemId, if it doesn't exist
+                    }
+                );
+            });
+            //Send catalog to the recommender system
+            return client.send(new rqs.Batch(requests));
+        })
+        .then((responses) => {
+            // Generate some random purchases of items by users
+            var userIds = Array.apply(0, Array(NUM)).map((_, i) => {
+                return `user-${i}`;
+            });
+            var itemIds = Array.apply(0, Array(NUM)).map((_, i) => {
+                return `computer-${i}`;
+            });
+
+            // Generate some random purchases of items by users
+            const PROBABILITY_PURCHASED = 0.1;
+            var purchases = [];
+            userIds.forEach((userId) => {
+                var purchased = itemIds.filter(() => Math.random() < PROBABILITY_PURCHASED);
+                purchased.forEach((itemId) => {
+                    purchases.push(new rqs.AddPurchase(userId, itemId, {'cascadeCreate': true}))
+                });
+            });
+            // Send purchases to the recommender system
+            return client.send(new rqs.Batch(purchases));
+        })
+        .then((responses) => {
+            // Get 5 recommendations for user-42, who is currently viewing computer-6
+            return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5));
+        })
+        .then((recommended) => {
+            console.log("Recommended items: %j", recommended);
+
+            // Recommend only computers that have at least 3 cores
+            return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5,
+                {'filter': "'num-cores'>=3"}
+            ));
+        })
+        .then((recommended) => {
+            console.log("Recommended items with at least 3 processor cores: %j", recommended);
+
+            // Recommend only items that are more expensive then currently viewed item (up-sell)
+            return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5,
+                {'filter': "'num-cores'>=3"}
+            ));
+        })
+        .then((recommended) => {
+            console.log("Recommended up-sell items: %j", recommended)
+        })
+        .catch((error) => {
+            console.error(error);
+            // Use fallback
+        });
+}
+
+//[{
+// price: double,
+//name: string
+// }]
+
+/* GET home page. */
+router.post('/properties', async (req, res, next) => {
+    let requests = req.body.map((properties_object) => {
+        let property;
+        for (const prop in properties_object) {
+            property = prop;
+        }
+        return new rqs.AddItemProperty(property, properties_object[property]);
+    });
+    try {
+        await client.send(new rqs.Batch(requests));
+        res.status(200).send('Props added!');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.post('/products', async (req, res, next) => {
+    let requests = req.body.map((product) => {
+
+        for (const prop in product) {
+            console.log(prop);
+            return new rqs.AddItemProperty(prop, properties_object[prop]);
+        }
+
+        return new rqs.SetItemValues(
+            `computer-${i}`, //itemId
+            //values:
+            {
+                'price': 600 + 400 * Math.random(),
+                'num-cores': Math.floor(Math.random() * 8) + 1,
+                'description': 'Great computer',
+                'time': new Date().toISOString(),
+                'image': `http://examplesite.com/products/computer-${i}.jpg`
+            },
+            //optional parameters:
+            {
+                'cascadeCreate': true // Use cascadeCreate for creating item
+                // with given itemId, if it doesn't exist
+            }
+        );
+    });
+    //Send catalog to the recommender system
+    return client.send(new rqs.Batch(requests));
+
+    await client.send(new rqs.Batch(requests));
+
+    res.render('index', { title: 'Express' });
+});
+
+module.exports = router;
