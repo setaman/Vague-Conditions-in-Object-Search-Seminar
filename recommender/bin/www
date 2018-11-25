@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('recommender:server');
 var http = require('http');
+let log = require('../logger');
 
 /**
  * Get port from environment and store in Express.
@@ -87,5 +88,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log('Listening on ' + bind);
+  log.info('recommender', 'Listening on ' + bind);
 }

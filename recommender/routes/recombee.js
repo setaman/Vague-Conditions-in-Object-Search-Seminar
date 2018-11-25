@@ -1,12 +1,10 @@
-var recombee = require('recombee-api-client');
-var rqs = recombee.requests;
-
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
+let recombee = require('recombee-api-client');
+let rqs = recombee.requests;
+let router = express.Router();
 const credentials = require('../creds');
 
-var client = new recombee.ApiClient(credentials.recommbe_db, credentials.recommbe_token);
+let client = new recombee.ApiClient(credentials.recommbe_db, credentials.recommbe_token);
 const NUM = 100;
 
 // We will use computers as items in this example
@@ -30,7 +28,7 @@ function f() {
             return 0;
             //Prepare requests for setting a catalog of computers
 
-            var requests = Array.apply(0, Array(NUM)).map((_, i) => {
+            let requests = Array.apply(0, Array(NUM)).map((_, i) => {
                 return new rqs.SetItemValues(
                     `computer-${i}`, //itemId
                     //values:
@@ -53,18 +51,18 @@ function f() {
         })
         .then((responses) => {
             // Generate some random purchases of items by users
-            var userIds = Array.apply(0, Array(NUM)).map((_, i) => {
+            let userIds = Array.apply(0, Array(NUM)).map((_, i) => {
                 return `user-${i}`;
             });
-            var itemIds = Array.apply(0, Array(NUM)).map((_, i) => {
+            let itemIds = Array.apply(0, Array(NUM)).map((_, i) => {
                 return `computer-${i}`;
             });
 
             // Generate some random purchases of items by users
             const PROBABILITY_PURCHASED = 0.1;
-            var purchases = [];
+            let purchases = [];
             userIds.forEach((userId) => {
-                var purchased = itemIds.filter(() => Math.random() < PROBABILITY_PURCHASED);
+                let purchased = itemIds.filter(() => Math.random() < PROBABILITY_PURCHASED);
                 purchased.forEach((itemId) => {
                     purchases.push(new rqs.AddPurchase(userId, itemId, {'cascadeCreate': true}))
                 });
@@ -130,9 +128,9 @@ router.post('/products', async (req, res, next) => {
         let generated_item_id = '';
 
         for (const prop in product) {
-            if (prop.toLocaleLowerCase() === 'id' || prop.toLocaleLowerCase() === '_id'){
+            if (prop.toLocaleLowerCase() === 'id' || prop.toLocaleLowerCase() === '_id') {
                 generated_item_id = product[prop];
-            }  else {
+            } else {
                 generated_item_values[prop] = product[prop];
             }
         }
@@ -140,20 +138,46 @@ router.post('/products', async (req, res, next) => {
         console.log(generated_item_id);
         console.log(generated_item_values);
 
-        return new rqs.SetItemValues(generated_item_id, generated_item_values,
-            //optional parameters:
-            {
-                'cascadeCreate': true // Use cascadeCreate for creating item with given itemId, if it doesn't exist
-            }
-        );
+        return new rqs.SetItemValues(generated_item_id, generated_item_values, {'cascadeCreate': true});
     });
-    //Send catalog to the recommender system
     try {
         await client.send(new rqs.Batch(requests));
         res.status(200).send('Products added!');
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
+});
+
+// ////////////////////////////////////////////////////////////
+//  INTERACTIONS
+// ////////////////////////////////////////////////////////////
+router.post('/purchase', async (req, res, next) => {
+    client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
+        'cascadeCreate': true,
+        'amount': req.body.amount,
+    }));
+});
+
+router.post('/bookmark', async (req, res, next) => {
+    client.send(new rqs.AddBookmark(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
+});
+
+router.post('/view', async (req, res, next) => {
+    client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:
+        'duration': req.body.duration,
+        'cascadeCreate': true,
+    }));
+});
+
+router.post('/rating', async (req, res, next) => {
+    client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, {'cascadeCreate': true}))
+});
+
+router.post('/cart', async (req, res, next) => {
+    client.send(new rqs.AddCartAddition(req.body.user_id, req.body.item_id, { //optional parameters:
+        'cascadeCreate': true,
+        'amount': req.body.amount,
+    }))
 });
 
 module.exports = router;
