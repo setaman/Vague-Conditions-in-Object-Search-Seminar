@@ -128,7 +128,7 @@ router.post('/products', async (req, res, next) => {
         let generated_item_id = '';
 
         for (const prop in product) {
-            if (prop.toLocaleLowerCase() === 'id' || prop.toLocaleLowerCase() === '_id') {
+            if (isID(prop)) {
                 generated_item_id = product[prop];
             } else {
                 generated_item_values[prop] = product[prop];
@@ -147,6 +147,51 @@ router.post('/products', async (req, res, next) => {
         res.status(500).send('Something is wrong' + e);
     }
 });
+
+router.post('/users/properties', async (req, res, next) => {
+    let requests = req.body.map((properties_object) => {
+        let property;
+        for (const prop in properties_object) {
+            property = prop;
+        }
+        return new rqs.AddUserProperty(property, properties_object[property]);
+    });
+    console.log(requests);
+    try {
+        await client.send(new rqs.Batch(requests));
+        res.status(200).send('User props added!');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.post('/users/values', async (req, res, next) => {
+    let requests = req.body.map((user) => {
+
+        let generated_user_values = {};
+        let generated_user_id = '';
+
+        for (const prop in user) {
+            if (isID(prop)) {
+                generated_user_id = user[prop];
+            } else {
+                generated_user_values[prop] = user[prop];
+            }
+        }
+
+        console.log(generated_user_id);
+        console.log(generated_user_values);
+
+        return new rqs.SetUserValues(generated_user_id, generated_user_values, {'cascadeCreate': true});
+    });
+    try {
+        await client.send(new rqs.Batch(requests));
+        res.status(200).send('User values added!');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
 
 // ////////////////////////////////////////////////////////////
 //  INTERACTIONS
@@ -179,5 +224,10 @@ router.post('/cart', async (req, res, next) => {
         'amount': req.body.amount,
     }))
 });
+
+function isID(prop) {
+    prop = prop.toLowerCase();
+    return prop.indexOf('id') > -1;
+}
 
 module.exports = router;
