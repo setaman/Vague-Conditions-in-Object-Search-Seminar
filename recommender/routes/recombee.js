@@ -204,7 +204,13 @@ router.post('/purchase', async (req, res, next) => {
 });
 
 router.post('/bookmark', async (req, res, next) => {
-    client.send(new rqs.AddBookmark(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
+
+    try {
+        await client.send(new rqs.AddBookmark(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
+        res.status(200).send('User ' + req.body.user_id + ' bookmarked ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
 });
 
 router.post('/view', async (req, res, next) => {
