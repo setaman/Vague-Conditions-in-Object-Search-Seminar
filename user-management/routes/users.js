@@ -3,10 +3,6 @@ let router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const log = require('../logger');
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
-});
 
 router.post('/login', async (req, res, next) => {
     passport.authenticate('login',
@@ -25,7 +21,7 @@ router.post('/login', async (req, res, next) => {
                     return next(err);
                 }
                 const token = jwt.sign({name: user.name, _id: user._id}, 'secret');
-                return res.json({token});
+                return res.json({token, name: user.name, password: user.password});
             })
         })(req, res, next);
 });

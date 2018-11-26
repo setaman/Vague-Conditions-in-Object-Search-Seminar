@@ -12,4 +12,11 @@ function getItems (){
     return axios('http://localhost:3000/recommendation/items');
 }
 
-export {send, getTest, getItems};
+function login (credentials){
+    return axios.post('http://localhost:3001/users/login', {
+        name: credentials.name,
+        password: credentials.password
+    });
+}
+
+export {send, getTest, getItems, login};
