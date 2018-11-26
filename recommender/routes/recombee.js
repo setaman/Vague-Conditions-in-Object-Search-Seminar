@@ -288,6 +288,28 @@ router.post('/cart', async (req, res, next) => {
 //  INTERACTIONS
 // ////////////////////////////////////////////////////////////
 
+// ////////////////////////////////////////////////////////////
+//  Recommendation
+// /////////////
+
+//ITEMS to USER
+router.get('/recommendeditems', async (req, res, next) => {
+    try {
+        let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user, 10, {
+            'cascadeCreate': true,
+            'returnProperties': true,
+    }));
+        res.status(200).send(recommended_items.recomms);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+// //////////////
+//  INTERACTIONS
+// ////////////////////////////////////////////////////////////
+
+
+
 function isID(prop) {
     return prop.toLowerCase().indexOf('id') > -1;
 }
