@@ -8,4 +8,8 @@ function getTest (){
     return axios('http://localhost:3000/test');
 }
 
-export {send, getTest};
+function getItems (){
+    return axios('http://localhost:3000/recommendation/items');
+}
+
+export {send, getTest, getItems};

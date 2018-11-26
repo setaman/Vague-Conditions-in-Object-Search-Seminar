@@ -10,16 +10,12 @@
         </v-icon>
 
         <v-btn block @click="getTest">
-          Get neo4j data
+          Get Items
         </v-btn>
       </v-flex>
 
       <v-flex sx12>
-        <ul>
-          <li v-for="(item, i) in neo" :key="i">
-              {{item._fields[0].properties.name || 'name'}}
-          </li>
-        </ul>
+        <item v-for="(item, i) in items" :key="i" :item="item.json"></item>
       </v-flex>
 
     </v-layout>
@@ -27,19 +23,21 @@
 </template>
 
 <script>
-  import {send, getTest} from '@/api';
+  import {send, getTest, getItems} from '@/api';
+  import Item from "./Item";
 
   export default {
-    data: () => ({
-        neo: [],
+      components: {Item},
+      data: () => ({
+        items: [],
     }),
       methods: {
           getTest() {
-              getTest()
+              getItems()
                   .then((response) => {
-                      this.neo = [];
-                      this.neo.push(...response.data);
-                      console.log('NEO: ', this.neo);
+                      this.items = [];
+                      this.items.push(...response.data);
+                      console.warn(this.items);
                   })
                   .catch(console.error);
           },

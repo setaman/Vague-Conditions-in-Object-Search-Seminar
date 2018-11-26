@@ -5,6 +5,8 @@ let logger = require('morgan');
 let cors = require('cors');
 let app = express();
 
+let recombee = require('./routes/recombee');
+
 
 let corsOptions = {
     origin: 'http://localhost:8080',
@@ -24,14 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/test', neo4jRouter);
 
-app.use('/recommendation', neo4jRouter);
-
-app.use('/like', neo4jRouter);
-
-app.use('/view', neo4jRouter);
-
-app.use('/purchase', neo4jRouter);
-
-
+app.use('/recommendation', recombee);
 
 module.exports = app;
