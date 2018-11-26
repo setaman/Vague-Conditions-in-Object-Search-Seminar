@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-function rateItem (user_id, stars){
-    return axios('http://localhost:3000/recommendation/rating', {
-        rating: stars,
-        user_id: user_id,
+function rateItem (user_id, item_id, rating){
+    return axios.post('http://localhost:3000/recommendation/rating', {
+        rating,
+        user_id,
+        item_id,
     });
 }
 

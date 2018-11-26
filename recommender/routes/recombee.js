@@ -3,6 +3,7 @@ let recombee = require('recombee-api-client');
 let rqs = recombee.requests;
 let router = express.Router();
 const credentials = require('../creds');
+const log = require('../logger');
 
 let client = new recombee.ApiClient(credentials.recommbe_db, credentials.recommbe_token);
 const NUM = 100;
@@ -265,6 +266,7 @@ router.post('/view', async (req, res, next) => {
 
 router.post('/rating', async (req, res, next) => {
     let rating = (Number.parseFloat((parseInt(req.body.rating) - 3) / 2).toFixed(2));
+    log.info('rating', rating);
     try {
         await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, rating, {
             'cascadeCreate': true
@@ -309,7 +311,6 @@ router.get('/recommendeditems', async (req, res, next) => {
 // //////////////
 //  RECOMMENDATIONS
 // ////////////////////////////////////////////////////////////
-
 
 function normalizeItemsStructure(items, items_ids) {
     return items.map((item, index) => {

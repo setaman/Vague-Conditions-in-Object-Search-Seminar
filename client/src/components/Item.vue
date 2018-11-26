@@ -47,7 +47,7 @@
         },
         methods: {
             rateItem() {
-                rateItem(this.$store.state.user.id, this.rating)
+                rateItem(this.$store.state.user.id, this.item.id, this.rating)
                     .then(console.log)
                     .catch(console.error)
             },
