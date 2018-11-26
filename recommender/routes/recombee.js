@@ -197,14 +197,19 @@ router.post('/users/values', async (req, res, next) => {
 //  INTERACTIONS
 // ////////////////////////////////////////////////////////////
 router.post('/purchase', async (req, res, next) => {
-    client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
-        'cascadeCreate': true,
-        'amount': req.body.amount,
-    }));
+    try {
+        await client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
+            'cascadeCreate': true,
+            'amount': req.body.amount,
+        }));
+        res.status(200).send('User ' + req.body.user_id + ' purchased ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+
 });
 
 router.post('/bookmark', async (req, res, next) => {
-
     try {
         await client.send(new rqs.AddBookmark(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
         res.status(200).send('User ' + req.body.user_id + ' bookmarked ' + req.body.item_id);
@@ -214,26 +219,41 @@ router.post('/bookmark', async (req, res, next) => {
 });
 
 router.post('/view', async (req, res, next) => {
-    client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:
-        'duration': req.body.duration,
-        'cascadeCreate': true,
-    }));
+    try {
+        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:
+            'duration': req.body.duration,
+            'cascadeCreate': true,
+        }));
+        res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
 });
 
 router.post('/rating', async (req, res, next) => {
-    client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, {'cascadeCreate': true}))
+    try {
+        await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
+        res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
 });
 
 router.post('/cart', async (req, res, next) => {
-    client.send(new rqs.AddCartAddition(req.body.user_id, req.body.item_id, { //optional parameters:
-        'cascadeCreate': true,
-        'amount': req.body.amount,
-    }))
+    try {
+        await client.send(new rqs.AddCartAddition(req.body.user_id, req.body.item_id, { //optional parameters:
+            'cascadeCreate': true,
+            'amount': req.body.amount,
+        }));
+        res.status(200).send('User ' + req.body.user_id + ' added to cart ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+
 });
 
 function isID(prop) {
-    prop = prop.toLowerCase();
-    return prop.indexOf('id') > -1;
+    return prop.toLowerCase().indexOf('id') > -1;
 }
 
 module.exports = router;
