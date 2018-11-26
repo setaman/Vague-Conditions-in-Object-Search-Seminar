@@ -30,7 +30,10 @@ export default new Vuex.Store({
                     localStorage.setItem("name", response.data.name);
                     localStorage.setItem("id", response.data.id);
                 })
-                .catch(console.error);
+                .catch(error => {
+                    console.error(error);
+                    throw error;
+                });
         }
     }
 })
