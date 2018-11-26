@@ -161,8 +161,16 @@ router.get('/items', async (req, res) => {
         });
 
         items = await client.send(new rqs.Batch(requests));
-        console.log(items);
         res.status(200).send(items);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.get('/items/:id', async (req, res) => {
+    try {
+        let item = await client.send(new rqs.GetItemValues(req.params.id));
+        res.status(200).send(item);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
