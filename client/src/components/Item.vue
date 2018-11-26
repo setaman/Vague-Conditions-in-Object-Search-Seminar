@@ -25,13 +25,15 @@
                 </v-btn>
             </v-flex>
             <v-flex xs12>
-                <v-rating v-model="rating"></v-rating>
+                <v-rating v-model="rating" @input="rateItem"></v-rating>
             </v-flex>
         </v-layout>
     </v-flex>
 </template>
 
 <script>
+    import {rateItem} from '@/api';
+
     export default {
         name: "Item",
         data: () => ({
@@ -42,7 +44,14 @@
                 type: Object,
                 require: true,
             }
-        }
+        },
+        methods: {
+            rateItem() {
+                rateItem(this.$store.state.user.id, this.item.id, this.rating)
+                    .then(console.log)
+                    .catch(console.error)
+            },
+        },
     }
 </script>
 

@@ -12,7 +12,7 @@ let corsOptions = {
     origin: 'http://localhost:8080',
     optionsSuccessStatus: 200
 };
-app.use(cors());
+app.use(cors(corsOptions));
 
 let indexRouter = require('./routes/index');
 let neo4jRouter = require('./routes/neo4j');

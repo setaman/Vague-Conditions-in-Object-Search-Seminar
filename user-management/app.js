@@ -3,6 +3,10 @@ let path = require('path');
 const bodyParser = require('body-parser');
 let logger = require('morgan');
 let cors = require('cors');
+let corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+};
 const MongoClient = require('mongodb').MongoClient;
 const log = require('./logger');
 
@@ -101,7 +105,7 @@ passport.use(new JwtStrategy({
 
 let app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');

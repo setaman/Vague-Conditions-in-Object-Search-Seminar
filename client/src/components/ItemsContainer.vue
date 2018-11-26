@@ -15,7 +15,7 @@
       </v-flex>
 
       <v-flex sx12>
-        <item v-for="(item, i) in items" :key="i" :item="item.json"></item>
+        <item v-for="(item, i) in items" :key="i" :item="item"></item>
       </v-flex>
 
     </v-layout>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import {send, getTest, getItems} from '@/api';
+  import {getItems} from '@/api';
   import Item from "./Item";
 
   export default {
