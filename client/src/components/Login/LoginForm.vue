@@ -83,7 +83,7 @@
             position: relative;
             overflow: hidden;
             &:hover {
-                box-shadow: 0 5px 15px 1px #c0c0c0 !important;
+                box-shadow: 0 5px 15px 1px rgba(54, 192, 125, 0.47) !important;
             }
         }
 
@@ -124,6 +124,7 @@
             opacity: 0;
         }
         100% {
+            z-index: 0;
             opacity: 0;
             right: 20%;
         }
@@ -137,6 +138,7 @@
             opacity: 1;
         }
         100% {
+            z-index: 1;
             opacity: 1;
             right: 0;
         }

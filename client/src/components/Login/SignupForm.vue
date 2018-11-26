@@ -127,6 +127,7 @@
             opacity: 0;
         }
         100% {
+            z-index: 0;
             opacity: 0;
             left: 20%;
         }
@@ -140,6 +141,7 @@
             opacity: 1;
         }
         100% {
+            z-index: 1;
             opacity: 1;
             left: 0;
         }
