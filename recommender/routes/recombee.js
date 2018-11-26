@@ -162,8 +162,7 @@ router.get('/items', async (req, res) => {
         });
 
         items = await client.send(new rqs.Batch(requests));
-        items = normalizeItemsStructure(items, items_ids);
-        console.log(items);
+        items = sanitizeItems(items, items_ids);
         res.status(200).send(items);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
@@ -299,11 +298,11 @@ router.post('/cart', async (req, res, next) => {
 //ITEMS to USER
 router.get('/recommendeditems', async (req, res, next) => {
     try {
-        let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user, 10, {
+        let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user_id, 10, {
             'cascadeCreate': true,
             'returnProperties': true,
     }));
-        res.status(200).send(recommended_items.recomms);
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -312,10 +311,17 @@ router.get('/recommendeditems', async (req, res, next) => {
 //  RECOMMENDATIONS
 // ////////////////////////////////////////////////////////////
 
-function normalizeItemsStructure(items, items_ids) {
+function sanitizeItems(items, items_ids) {
     return items.map((item, index) => {
         item.json.id = items_ids[index];
         return item.json;
+    });
+}
+
+function sanitizeRecommendedItems(items) {
+    return items.map((item) => {
+        let id = item.id;
+        return {id, ...item.values}
     });
 }
 

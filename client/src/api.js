@@ -8,12 +8,16 @@ function rateItem (user_id, item_id, rating){
     });
 }
 
-function getTest (){
-    return axios('http://localhost:3000/test');
-}
-
 function getItems (){
     return axios('http://localhost:3000/recommendation/items');
+}
+
+function getRecommendedItems (user_id){
+    return axios('http://localhost:3000/recommendation/recommendeditems', {
+        params: {
+            user_id
+        }
+    });
 }
 
 function login (credentials){
@@ -23,4 +27,4 @@ function login (credentials){
     });
 }
 
-export {rateItem, getTest, getItems, login};
+export {rateItem, getRecommendedItems, getItems, login};
