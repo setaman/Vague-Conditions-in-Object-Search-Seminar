@@ -99,12 +99,15 @@ function f() {
         });
 }
 
-//[{
-// price: double,
-//name: string
-// }]
+// ////////////////////////////////////////////////////////////
+//  Items
+// /////////////
 
-/* GET home page. */
+/* [
+    {price: double},
+    {name: string},
+   ]
+*/
 router.post('/properties', async (req, res, next) => {
     let requests = req.body.map((properties_object) => {
         let property;
@@ -143,6 +146,23 @@ router.post('/items', async (req, res, next) => {
     try {
         await client.send(new rqs.Batch(requests));
         res.status(200).send('Products added!');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.get('/items', async (req, res) => {
+    try {
+        let items;
+        let items_ids = await client.send(new rqs.ListItems());
+
+        let requests = items_ids.map((id) => {
+            return new rqs.GetItemValues(id);
+        });
+
+        items = await client.send(new rqs.Batch(requests));
+        console.log(items);
+        res.status(200).send(items);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -191,11 +211,14 @@ router.post('/users/values', async (req, res, next) => {
         res.status(500).send('Something is wrong' + e);
     }
 });
+// //////////////
+//  items
+// ////////////////////////////////////////////////////////////
 
 
 // ////////////////////////////////////////////////////////////
 //  INTERACTIONS
-// ////////////////////////////////////////////////////////////
+// /////////////
 router.post('/purchase', async (req, res, next) => {
     try {
         await client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
@@ -231,8 +254,11 @@ router.post('/view', async (req, res, next) => {
 });
 
 router.post('/rating', async (req, res, next) => {
+    let rating = (Number.parseFloat((parseInt(req.body.rating) - 3) / 2).toFixed(2));
     try {
-        await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, {'cascadeCreate': true}));
+        await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, rating, {
+            'cascadeCreate': true
+        }));
         res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
@@ -249,8 +275,10 @@ router.post('/cart', async (req, res, next) => {
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
-
 });
+// //////////////
+//  INTERACTIONS
+// ////////////////////////////////////////////////////////////
 
 function isID(prop) {
     return prop.toLowerCase().indexOf('id') > -1;
