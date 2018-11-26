@@ -121,17 +121,17 @@ router.post('/properties', async (req, res, next) => {
     }
 });
 
-router.post('/products', async (req, res, next) => {
-    let requests = req.body.map((product) => {
+router.post('/items', async (req, res, next) => {
+    let requests = req.body.map((item) => {
 
         let generated_item_values = {};
         let generated_item_id = '';
 
-        for (const prop in product) {
+        for (const prop in item) {
             if (isID(prop)) {
-                generated_item_id = product[prop];
+                generated_item_id = item[prop];
             } else {
-                generated_item_values[prop] = product[prop];
+                generated_item_values[prop] = item[prop];
             }
         }
 
