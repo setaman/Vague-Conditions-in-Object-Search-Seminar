@@ -51,11 +51,11 @@
         left: 0;
 
         &.active {
-            animation: show-form 0.5s ease forwards;
+            animation: show-form 1.3s ease forwards;
         }
 
         &.hidden {
-            animation: hide-form 0.5s ease forwards;
+            animation: hide-form 1.3s ease forwards;
         }
 
         h1 {

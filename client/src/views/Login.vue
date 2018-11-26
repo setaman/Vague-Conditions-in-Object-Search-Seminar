@@ -143,11 +143,11 @@
         left: 0;
 
         &.signup-active {
-            animation: activate-signup 0.5s ease forwards;
+            animation: activate-signup 1s ease forwards;
         }
 
         &.login-active {
-            animation: activate-login 0.5s ease forwards;
+            animation: activate-login 1s ease forwards;
         }
 
         h1 {

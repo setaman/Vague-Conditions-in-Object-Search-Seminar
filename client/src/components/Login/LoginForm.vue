@@ -51,11 +51,11 @@
         right: 0;
 
         &.active {
-            animation: show-login-form 0.5s ease forwards;
+            animation: show-login-form 1.3s ease forwards;
         }
 
         &.hidden {
-            animation: hide-login-form 0.5s ease forwards;
+            animation: hide-login-form 1.3s ease forwards;
         }
 
         h1 {
