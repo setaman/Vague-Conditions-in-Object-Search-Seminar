@@ -161,6 +161,8 @@ router.get('/items', async (req, res) => {
         });
 
         items = await client.send(new rqs.Batch(requests));
+        items = normalizeItemsStructure(items, items_ids);
+        console.log(items);
         res.status(200).send(items);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
@@ -289,7 +291,7 @@ router.post('/cart', async (req, res, next) => {
 // ////////////////////////////////////////////////////////////
 
 // ////////////////////////////////////////////////////////////
-//  Recommendation
+//  RECOMMENDATIONS
 // /////////////
 
 //ITEMS to USER
@@ -305,10 +307,16 @@ router.get('/recommendeditems', async (req, res, next) => {
     }
 });
 // //////////////
-//  INTERACTIONS
+//  RECOMMENDATIONS
 // ////////////////////////////////////////////////////////////
 
 
+function normalizeItemsStructure(items, items_ids) {
+    return items.map((item, index) => {
+        item.json.id = items_ids[index];
+        return item.json;
+    });
+}
 
 function isID(prop) {
     return prop.toLowerCase().indexOf('id') > -1;

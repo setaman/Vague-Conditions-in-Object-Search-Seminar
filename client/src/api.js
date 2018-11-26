@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-function send (){
-    return axios('http://localhost:3000/users/1234/email').then(console.log);
+function rateItem (user_id, stars){
+    return axios('http://localhost:3000/recommendation/rating', {
+        rating: stars,
+        user_id: user_id,
+    });
 }
 
 function getTest (){
@@ -19,4 +22,4 @@ function login (credentials){
     });
 }
 
-export {send, getTest, getItems, login};
+export {rateItem, getTest, getItems, login};

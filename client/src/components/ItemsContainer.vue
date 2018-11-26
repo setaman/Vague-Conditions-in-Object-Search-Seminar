@@ -15,7 +15,7 @@
       </v-flex>
 
       <v-flex sx12>
-        <item v-for="(item, i) in items" :key="i" :item="item.json"></item>
+        <item v-for="(item, i) in items" :key="i" :item="item"></item>
       </v-flex>
 
     </v-layout>

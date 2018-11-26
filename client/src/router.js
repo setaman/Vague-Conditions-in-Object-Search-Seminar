@@ -10,7 +10,7 @@ function requireAuth(to, from ,next) {
     if (store.state.getUser) {
         next();
     } else {
-        next('/');
+        next('/login');
     }
 }
 

@@ -7,10 +7,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        user: {}
+        user: {
+            name: localStorage.getItem("name"),
+            id: localStorage.getItem("id"),
+            token: localStorage.getItem("jwtToken"),
+        }
     },
     getters: {
-        isLoggedIn: state => !!localStorage.getItem("jwt")
+        isLoggedIn: state => !!localStorage.getItem("jwtToken")
     },
     mutations: {
         login: (state, user) => state.user = user
@@ -23,6 +27,8 @@ export default new Vuex.Store({
                     console.log(response);
                     axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
                     localStorage.setItem("jwtToken", response.data.token);
+                    localStorage.setItem("name", response.data.name);
+                    localStorage.setItem("id", response.data.id);
                 })
                 .catch(console.error);
         }
