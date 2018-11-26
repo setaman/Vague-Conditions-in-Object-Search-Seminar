@@ -2,47 +2,26 @@
     <v-container fluid grid-list-xl class="login-container" fill-height>
         <v-layout row wrap justify-center align-center fill-height>
             <v-flex xs12 sm12 md8 lg8 xl6 class="elevation-10 card" pa-0>
+                <loading-container :loading="loading">
                     <div class=" text-xs-center switcher-container d-flex column wrap justify-center align-center"
-                        :class="switchAnimation">
-                        <div>
-                            <h1>Hello Again</h1>
-                            <p>Bllasl lsf lsldl sfld lsdf </p>
-                            <button class="mt-5" @click="signup_activated = !signup_activated">
-                                Signup
-                            </button>
+                         :class="switchAnimation">
+                        <div class="switcher-content">
+                            <fade-transition :value="signup_activated">
+                                <h1 class="mb-3">{{!signup_activated ? login_text[0] : signup_text[0]}}</h1>
+                                <p>{{!signup_activated ? login_text[1] : signup_text[1]}}</p>
+                                <span class="ma-3">or</span>
+                                <button class="mt-5" @click="signup_activated = !signup_activated">
+                                    {{!signup_activated ? 'sign up' : 'login'}}
+                                </button>
+                            </fade-transition>
                         </div>
                     </div>
-                <div class=" text-xs-center login-form-container d-flex column wrap justify-center align-center">
-                    <div>
-                        <h1>Login</h1>
-                        <p>Enter your name and password</p>
-                        <label class="mt-5" for="name">
-                            Name
-                            <input type="text" id="name" v-model="name">
-                        </label>
-                        <label for="pass">
-                            Password
-                            <input type="text" id="pass" v-model="password">
-                        </label>
-                        <button class="elevation-5 mt-5" @click="login">login</button>
-                    </div>
-                </div>
-                    <!--<v-layout row wrap fill-height mt-0>
-                        <v-flex xs12 sm4 class="switcher-container">
-                            <h1>Login with your Data</h1>
-                            <p>Bllasl lsf lsldl sfld lsdf </p>
-                            <v-btn @click="login" :loading="loading">
-                                login
-                            </v-btn>
-                        </v-flex>
-                        <v-flex xs12 sm4>
-                            <h1>Login with your Data</h1>
-                            <p>Bllasl lsf lsldl sfld lsdf </p>
-                            <v-btn @click="login" :loading="loading">
-                                login
-                            </v-btn>
-                        </v-flex>
-                    </v-layout>-->
+                    <signup-form v-on:signup="login($event)"
+                                 :active="signup_activated"/>
+
+                    <login-form  v-on:login="login($event)"
+                            :active="!signup_activated"/>
+                </loading-container>
             </v-flex>
         </v-layout>
 
@@ -67,28 +46,34 @@
 
 <script>
     import {login} from '@/api';
+    import FadeTransition from "../components/Transitions/FadeTransition";
+    import LoadingContainer from "../components/Base/LoadingContainer";
+    import LoginForm from "../components/Login/LoginForm";
+    import SignupForm from "../components/Login/SignupForm";
 
     export default {
         name: "Login",
+        components: {SignupForm, LoginForm, LoadingContainer, FadeTransition},
         data: () => ({
             loading: false,
-            name: 'admin',
-            password: 'admin',
             snackbar: '',
             snackbar_text: '',
             snackbar_error: false,
 
             signup_activated: false,
+
+            login_text: ['Hello Again', 'Login with your data, click around and just see what happens'],
+            signup_text: ['Add new user', 'Create new user, click around and just see what happens'],
         }),
         methods: {
-            login() {
+            login(credentials) {
                 this.loading = true;
 
-                this.$store.dispatch('login', {name: this.name, password: this.password})
+                this.$store.dispatch('login', {name: credentials.name, password: credentials.password})
                     .then((data) => {
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             this.$router.push('/');
-                        }, 1000);
+                        }, 2000);
                     })
                     .catch((error) => {
                         console.error(error);
@@ -97,15 +82,14 @@
                         this.snackbar_text = 'Error, please check your password and name';
                     })
                     .finally(() => {
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             this.loading = false;
-                        }, 1000);
+                        }, 2000);
                     })
             }
         },
         computed: {
             switchAnimation() {
-                console.warn(this.signup_activated);
                 if (this.signup_activated) {
                     return {
                         'signup-active': true
@@ -115,7 +99,7 @@
                     'login-active': true
                 };
 
-            }
+            },
         }
     }
 </script>
@@ -126,7 +110,7 @@
         //background-image: linear-gradient(to right top, #1f0059, #240056, #290052, #2c004f, #2f004c);
     }
 
-    .card{
+    .card {
         overflow: hidden;
         height: 600px;
         position: relative;
@@ -155,13 +139,14 @@
         background-image: linear-gradient(to right top, #29d389, #00c798, #00baa3, #00ada7, #009fa6);
         height: 100%;
         width: 40%;
-        background-color: green;
         position: absolute;
         top: 0;
         left: 0;
+
         &.signup-active {
             animation: activate-signup 0.5s ease forwards;
         }
+
         &.login-active {
             animation: activate-login 0.5s ease forwards;
         }
@@ -172,10 +157,17 @@
             color: white;
             font-size: 3rem;
         }
+
         p {
             width: 100%;
             color: white;
             font-size: 2rem;
+        }
+
+        span {
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
         }
 
         button {
@@ -200,54 +192,8 @@
         }
     }
 
-    .login-form-container {
-        padding: 10%;
-        height: 100%;
-        width: 60%;
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        h1 {
-            font-weight: bold;
-            font-size: 2.3rem;
-            letter-spacing: 0.3rem;
-        }
-
-        p {
-            font-weight: lighter;
-            font-size: 1.5rem;
-            letter-spacing: 0.1rem;
-        }
-
-        button:hover {
-            box-shadow: 0 5px 15px 1px #c0c0c0 !important;
-        }
-
-        label {
-            text-align: left !important;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            display: block;
-            width: 100%;
-            color: black;
-            input {
-                transition: all 0.3s;
-                font-weight: bold;
-                font-size: 1.2rem;
-                padding-left: 10px;
-                outline: none;
-                color: black;
-                margin: 10px 0;
-                background-color: #f4f8f7;
-                height: 50px;
-                border-radius: 3px;
-                width: 100%;
-                &:focus {
-                    border-bottom: 3px solid deepskyblue;
-                }
-            }
-        }
+    .switcher-content {
+        max-width: 400px;
     }
 
     @keyframes activate-signup {
@@ -271,7 +217,7 @@
             width: 40%;
         }
         50% {
-            left: 10%;
+            left: 0%;
             width: 90%;
         }
         100% {
@@ -279,4 +225,33 @@
             width: 40%;
         }
     }
+
+    @keyframes hide-login-form {
+        0% {
+            opacity: 1;
+            right: 0;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 0;
+            right: 20%;
+        }
+    }
+
+    @keyframes show-login-form {
+        0% {
+            opacity: 0;
+            right: 10%;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 1;
+            right: 0;
+        }
+    }
+
 </style>
