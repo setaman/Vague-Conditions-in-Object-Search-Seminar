@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import {send, getTest, getItems} from '@/api';
+  import {getItems} from '@/api';
   import Item from "./Item";
 
   export default {

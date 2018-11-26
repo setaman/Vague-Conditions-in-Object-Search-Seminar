@@ -4,17 +4,17 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Recomms from './views/Recommended.vue'
 
-import store from '@/store';
+//import store from '@/store';
 
 Vue.use(Router)
 
-function requireAuth(to, from ,next) {
+/*function requireAuth(to, from ,next) {
     if (store.state.getUser) {
         next();
     } else {
         next('/login');
     }
-}
+}*/
 
 export default new Router({
     routes: [

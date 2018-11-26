@@ -14,7 +14,7 @@ export default new Vuex.Store({
         }
     },
     getters: {
-        isLoggedIn: state => !!localStorage.getItem("jwtToken")
+        isLoggedIn: () => !!localStorage.getItem("jwtToken")
     },
     mutations: {
         login: (state, user) => state.user = user

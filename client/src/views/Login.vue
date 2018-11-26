@@ -45,7 +45,6 @@
 </template>
 
 <script>
-    import {login} from '@/api';
     import FadeTransition from "../components/Transitions/FadeTransition";
     import LoadingContainer from "../components/Base/LoadingContainer";
     import LoginForm from "../components/Login/LoginForm";
@@ -70,7 +69,7 @@
                 this.loading = true;
 
                 this.$store.dispatch('login', {name: credentials.name, password: credentials.password})
-                    .then((data) => {
+                    .then(() => {
                         setTimeout(() => {
                             this.$router.push('/');
                         }, 2000);
