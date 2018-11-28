@@ -13,26 +13,28 @@
                         add
                     </v-icon>
                 </v-btn>
-                <v-btn icon flat color="blue">
+                <v-btn icon flat color="blue"
+                       @click="interaction('bookmark')">
                     <v-icon>
                         bookmark
                     </v-icon>
                 </v-btn>
-                <v-btn icon flat color="blue">
+                <v-btn icon flat color="blue"
+                       @click="interaction('cart')">
                     <v-icon>
                         shopping_basket
                     </v-icon>
                 </v-btn>
             </v-flex>
             <v-flex xs12>
-                <v-rating v-model="rating" @input="rateItem"></v-rating>
+                <v-rating v-model="rating" @input="interaction('rating')"></v-rating>
             </v-flex>
         </v-layout>
     </v-flex>
 </template>
 
 <script>
-    import {rateItem} from '@/api';
+    import { callInteraction } from '@/api';
 
     export default {
         name: "Item",
@@ -46,10 +48,10 @@
             }
         },
         methods: {
-            rateItem() {
-                rateItem(this.$store.state.user.id, this.item.id, this.rating)
+            interaction(action) {
+                callInteraction(action, {user_id: this.$store.state.user.id, item_id: this.item.id, rating: this.rating})
                     .then(console.log)
-                    .catch(console.error)
+                    .catch(console.error);
             },
         },
     }
