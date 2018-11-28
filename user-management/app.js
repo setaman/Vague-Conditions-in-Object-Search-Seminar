@@ -125,6 +125,7 @@ app.post('/verify', passport.authenticate('jwt', {session: false}), (req, res) =
     }
 );
 
+//test routes
 app.post('/add', async (req, res) => {
     try {
         let user = await db.collection('users').insertOne(req.body.user);
@@ -137,6 +138,20 @@ app.post('/add', async (req, res) => {
         res.status(500).send(e);
     }
 });
+
+app.get('/getall', async (req, res) => {
+    try {
+        let users = await db.collection('users').find().toArray();
+        res.send({
+            massage: 'DONE',
+            users
+        })
+    } catch (e) {
+        log.error('get all', e);
+        res.status(500).send(e);
+    }
+});
+
 
 //Handle errors
 app.use(function (err, req, res, next) {
