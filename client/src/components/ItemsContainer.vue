@@ -5,11 +5,7 @@
       wrap
     >
       <v-flex xs12>
-        <v-icon>
-          edit
-        </v-icon>
-
-        <v-btn block @click="getTest">
+        <v-btn color="#0062ff" large outline light block @click="getTest">
           Get Items
         </v-btn>
       </v-flex>
@@ -30,6 +26,7 @@
       components: {Item},
       data: () => ({
         items: [],
+          c: '#2d3490',
     }),
       methods: {
           getTest() {

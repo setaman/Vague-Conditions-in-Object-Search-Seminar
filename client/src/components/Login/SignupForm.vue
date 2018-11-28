@@ -58,6 +58,7 @@
         position: absolute;
         top: 0;
         left: 0;
+        background-color: white;
 
         &.active {
             animation: show-form 1.3s ease forwards;

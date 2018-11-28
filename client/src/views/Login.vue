@@ -1,7 +1,7 @@
 <template>
     <v-container fluid grid-list-xl class="login-container" fill-height>
         <v-layout row wrap justify-center align-center fill-height>
-            <v-flex xs12 sm12 md8 lg8 xl6 class="elevation-10 card" pa-0>
+            <v-flex xs12 sm12 md8 lg8 xl8 class="elevation-20 card" pa-0>
                 <loading-container :loading="loading">
                     <div class=" text-xs-center switcher-container d-flex column wrap justify-center align-center"
                          :class="switchAnimation">
@@ -126,7 +126,7 @@
 
 <style scoped lang="scss">
     .login-container {
-        background-color: white;
+        background-color: transparent;
         //background-image: linear-gradient(to right top, #1f0059, #240056, #290052, #2c004f, #2f004c);
     }
 
@@ -134,12 +134,11 @@
         overflow: hidden;
         height: 600px;
         position: relative;
-        background-color: white;
         border-radius: 5px;
+        background: white;
 
         button {
             transition: 0.3s;
-            background-image: linear-gradient(to right top, #29d389, #00c798, #00baa3, #00ada7, #009fa6);
             width: 100%;
             height: 50px;
             font-size: 1.6rem;
@@ -149,6 +148,13 @@
             color: white;
             position: relative;
             overflow: hidden;
+            background: transparent;
+            border: 2px solid white;
+            &:hover {
+                border: 2px solid #0062ff;
+                box-shadow: 0 0 10px 5px rgba(0, 12, 192, 0.22) !important;
+            }
+
         }
     }
 
@@ -156,7 +162,9 @@
         z-index: 2;
         transition: 0.5s;
         padding: 5%;
-        background-image: linear-gradient(to right top, #29d389, #00c798, #00baa3, #00ada7, #009fa6);
+        background: #18263a;
+        //background: linear-gradient(to right, #141e30, #243b55);
+        //background-image: linear-gradient(to right top, #29d389, #00c798, #00baa3, #00ada7, #009fa6);
         height: 100%;
         width: 40%;
         position: absolute;
@@ -189,31 +197,10 @@
             color: white;
             font-weight: bold;
         }
-
-        button {
-            background: transparent;
-            border: 2px solid white;
-            /*&:after {
-                //font-size: 5rem;
-                width: 20px;
-                height: 100%;
-                right: 10px;
-                bottom: 0;
-                content: '\2192';
-                position: absolute;
-                transition: 0.3s;
-            }*/
-            &:hover {
-                border: 2px solid #87fdff;
-                /*&:after {
-                    bottom: 0%;
-                }*/
-            }
-        }
     }
 
     .switcher-content {
-        max-width: 400px;
+        max-width: 350px;
     }
 
     @keyframes activate-signup {

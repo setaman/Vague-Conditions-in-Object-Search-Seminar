@@ -58,6 +58,7 @@
         position: absolute;
         top: 0;
         right: 0;
+        background-color: white;
 
         &.active {
             animation: show-login-form 1.3s ease forwards;
