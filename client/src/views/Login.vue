@@ -16,7 +16,7 @@
                             </fade-transition>
                         </div>
                     </div>
-                    <signup-form v-on:signup="login($event)"
+                    <signup-form v-on:signup="signup($event)"
                                  :active="signup_activated"/>
 
                     <login-form  v-on:login="login($event)"
@@ -69,6 +69,27 @@
                 this.loading = true;
 
                 this.$store.dispatch('login', {name: credentials.name, password: credentials.password})
+                    .then(() => {
+                        setTimeout(() => {
+                            this.$router.push('/');
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        this.snackbar = true;
+                        this.snackbar_error = true;
+                        this.snackbar_text = 'Error, please check your password and name';
+                    })
+                    .finally(() => {
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 2000);
+                    })
+            },
+            signup(credentials) {
+                this.loading = true;
+
+                this.$store.dispatch('signup', {name: credentials.name, password: credentials.password})
                     .then(() => {
                         setTimeout(() => {
                             this.$router.push('/');

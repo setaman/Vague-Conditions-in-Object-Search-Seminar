@@ -27,4 +27,11 @@ function login (credentials){
     });
 }
 
-export {rateItem, getRecommendedItems, getItems, login};
+function signup (credentials){
+    return axios.post('http://localhost:3001/users/signup', {
+        name: credentials.name,
+        password: credentials.password
+    });
+}
+
+export {rateItem, getRecommendedItems, getItems, login, signup};

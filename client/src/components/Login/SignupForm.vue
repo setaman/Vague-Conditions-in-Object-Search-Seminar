@@ -12,18 +12,22 @@
                 Password
                 <input type="text" id="pass" v-model="password">
             </label>
-            <button class="elevation-5 mt-5" @click="$emit('signup', {name, password})">sign up</button>
+            <btn-prim class="mt-5" @click.native="signup">
+                sing up
+            </btn-prim>
         </div>
     </div>
 </template>
 
 <script>
+    import BtnPrim from "../Base/BtnPrim";
     export default {
         name: "SignupForm",
+        components: {BtnPrim},
         props: ['active'],
         data: () => ({
-            name: 'admin',
-            password: 'admin',
+            name: 'test',
+            password: 'test',
         }),
         computed: {
             toggleLogin() {
@@ -36,6 +40,11 @@
                     'active': true
                 };
 
+            }
+        },
+        methods: {
+            signup() {
+                this.$emit('signup', {name: this.name, password: this.password})
             }
         }
     }
@@ -70,10 +79,6 @@
             letter-spacing: 0.1rem;
         }
 
-        button:hover {
-            box-shadow: 0 5px 15px 1px #c0c0c0 !important;
-        }
-
         label {
             text-align: left !important;
             text-transform: uppercase;
@@ -98,23 +103,6 @@
                 &:focus {
                     border-bottom: 3px solid deepskyblue;
                 }
-            }
-        }
-
-        button {
-            transition: 0.3s;
-            background-image: linear-gradient(to right top, #29d389, #00c798, #00baa3, #00ada7, #009fa6);
-            width: 100%;
-            height: 50px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            border-radius: 25px;
-            outline: none;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            &:hover {
-                box-shadow: 0 5px 15px 1px #c0c0c0 !important;
             }
         }
     }

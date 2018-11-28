@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { login } from '@/api';
+import { login, signup } from '@/api';
 import axios from 'axios';
 
 Vue.use(Vuex)
@@ -34,6 +34,16 @@ export default new Vuex.Store({
                     console.error(error);
                     throw error;
                 });
+        },
+        async signup({dispatch}, credentials) {
+            try {
+                let response = await signup(credentials);
+                console.log(response.data);
+                return dispatch('login', credentials)
+            } catch (error) {
+                console.error(error);
+                throw error
+            }
         }
     }
 })

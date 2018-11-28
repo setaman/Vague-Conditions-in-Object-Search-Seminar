@@ -30,7 +30,7 @@
             },
             overlayBackground() {
                 return {
-                    backgroundColor: `${this.loading ? 'rgba(0, 0, 0, 0.38)' : 'transparent'}`,
+                    //backgroundColor: `${this.loading ? 'rgba(0, 0, 0, 0.38)' : 'transparent'}`,
                     zIndex: `${this.loading ? '5' : '-1'}`
                 }
             }
