@@ -28,7 +28,7 @@ function normalizeText(text = '') {
             temp_text = JSON.stringify(text);
         } catch (e) {
             temp_text = '';
-            log,error('logger', 'Can not stringify text')
+            log.error('logger', 'Can not stringify text')
         }
     }
     return temp_text;
