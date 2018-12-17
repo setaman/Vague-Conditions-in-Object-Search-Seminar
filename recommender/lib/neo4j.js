@@ -20,13 +20,13 @@ module.exports.getTest = (req, res) => {
 module.exports.addMovies = (req, res) => {
     const movie = req.body;
     session
-        .run(`CREATE (m:Movie $props) RETURN m LIMIT 1`, {props: movie})
+        .run(`CREATE (m:Movie $props) RETURN m.title LIMIT 1`, {props: movie})
         .then(result => {
             res.status(200).type('application/json').send({movie_added: result.records[0]._fields[0]});
         })
         .catch((err) => {
             console.error(err);
-            res.status(500).type('application/json').send({err});
+            res.status(500).type('application/json').send({err, movie});
         })
         .finally(() => session.close())
 };

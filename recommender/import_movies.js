@@ -1,17 +1,14 @@
 const fs = require('fs');
 const axios = require('axios');
-const movies = JSON.parse(fs.readFileSync('movies/movies.json'));
+const movies = JSON.parse(fs.readFileSync('./movies/movies_neo4j.json'));
+const movies_recombee = JSON.parse(fs.readFileSync('./movies/movies_recombee.json'));
 const log = require('./logger');
 
-const getGenres = movie => `${movie.genres.map(genre => genre.name).join(', ')}`;
+let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
 
-const getCompanies = movie => `${movie.production_companies.map(company => company.name).join(', ')}`;
-
-const getCountries = movie => `${movie.production_countries.map(country => country.name).join(', ')}`;
-
-const getLanguages = movie => `${movie.spoken_languages.map(lang => lang.name).join(', ')}`;
-
-const getCollection = movie => movie.belongs_to_collection ? movie.belongs_to_collection.name : '';
+Promise.all(promises)
+    .then(res => console.log('ADDED', res.response.data))
+    .catch(error => console.error('IMPORT PROMISES', error.response.data));
 
 let properties = [
     {adult: 'boolean'},
@@ -35,9 +32,37 @@ let properties = [
     {release_date: 'string'},
 ];
 
-let sanitized_movies = movies.map(movie => {
+
+axios.post('http://localhost:3000/recommendation/items/properties', properties)
+    .then(() => {
+       log.info('Recommender add properties', 'Properties added!');
+       console.log(movies_recombee[128]);
+       axios.post('http://localhost:3000/recommendation/items', [movies_recombee[128], movies_recombee[1], movies_recombee[2]])
+           .then(() => log.info('Recommender', 'Items added!'))
+           .catch((error) => {
+               log.error('Recommender add items', 'Some error occurred');
+               console.log('Error', error.response.data);
+           });
+    })
+    .catch((error) => {
+        log.error('Recommender', 'Some error occurred');
+        console.log('Error', error.response.data);
+    });
+
+/*
+const getGenres = movie => `${movie.genres.map(genre => genre.name).join(', ')}`;
+
+const getCompanies = movie => `${movie.production_companies.map(company => company.name).join(', ')}`;
+
+const getCountries = movie => `${movie.production_countries.map(country => country.name).join(', ')}`;
+
+const getLanguages = movie => `${movie.spoken_languages.map(lang => lang.name).join(', ')}`;
+
+const getCollection = movie => movie.belongs_to_collection ? movie.belongs_to_collection.name : '';
+
+let sanitized_movies = movies_recombee.map(movie => {
     let m = {
-        id: movie.id,
+        uuid: movie.uuid,
         adult: movie.adult,
         budget: movie.budget,
         revenue: movie.revenue,
@@ -64,18 +89,5 @@ let sanitized_movies = movies.map(movie => {
 
     return m;
 });
+*/
 
-axios.post('http://localhost:3000/recommendation/items/properties', properties)
-    .then(() => {
-       log.info('Recommender add properties', 'Properties added!');
-       axios.post('http://localhost:3000/recommendation/items', [sanitized_movies[0], sanitized_movies[1], sanitized_movies[2]])
-           .then(() => log.info('Recommender', 'Items added!'))
-           .catch((error) => {
-               log.error('Recommender add items', 'Some error occurred');
-               console.log('Error', error.response.data);
-           });
-    })
-    .catch((error) => {
-        log.error('Recommender', 'Some error occurred');
-        console.log('Error', error.response.data);
-    });
