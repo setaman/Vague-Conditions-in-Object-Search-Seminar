@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
-const movies = JSON.parse(fs.readFileSync('./movies/movies_neo4j.json'));
-const movies_recombee = JSON.parse(fs.readFileSync('./movies/movies_recombee.json'));
+const movies = JSON.parse(fs.readFileSync('./movies/neo4j.json'));
+const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee.json'));
 const log = require('./logger');
 
 let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
@@ -31,7 +31,6 @@ let properties = [
     {title: 'string'},
     {release_date: 'string'},
 ];
-
 
 axios.post('http://localhost:3000/recommendation/items/properties', properties)
     .then(() => {

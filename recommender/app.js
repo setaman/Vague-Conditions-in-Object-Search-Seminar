@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/movies', neo4jRouter);
-
 app.use('/recommendation', recombee);
 
 module.exports = app;

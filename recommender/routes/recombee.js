@@ -34,49 +34,24 @@ router.post('/items/properties', async (req, res) => {
 
 router.post('/items', async (req, res, next) => {
 
-    let requests = [];
-    let generated_item_values = {};
-    let generated_item_id = '';
+    let requests = req.body.map((item) => {
 
-    console.log('ID', req.body.id);
+        let generated_item_values = {};
+        let generated_item_id = '';
 
-    if (req.body === [] || req.body === {}) {
-        res.status(404).send('Body is empty');
-        console.log('EMPTY');
-    }
-
-    /*if (typeof req.body === 'object'){
-        console.log(typeof req.body);
-        let item = req.body;
         for (const prop in item) {
-
             if (isID(prop)) {
                 generated_item_id = item[prop];
             } else {
                 generated_item_values[prop] = item[prop];
             }
         }
-        requests.push(new rqs.SetItemValues(generated_item_id, generated_item_values, {'cascadeCreate': true}));
-        console.log('REQ', requests);
-    } else {*/
-        requests = req.body.map((item) => {
-            for (const prop in item) {
-                if (isID(prop)) {
-                    generated_item_id = item[prop];
-                } else {
-                    generated_item_values[prop] = item[prop];
-                }
-            }
-            return new rqs.SetItemValues(generated_item_id, generated_item_values, {'cascadeCreate': true});
-        });
+        return new rqs.SetItemValues(generated_item_id, generated_item_values, {'cascadeCreate': true});
+    });
 
-        console.log('ARR rEQ', requests);
-
-    /*}*/
+    console.log('ARR rEQ', requests);
 
     try {
-        console.log('SENDING....');
-
         await client.send(new rqs.Batch(requests));
         res.status(200).send('Items added!');
     } catch (e) {
@@ -233,7 +208,7 @@ router.get('/recommendeditems', async (req, res, next) => {
         let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user_id, 10, {
             'cascadeCreate': true,
             'returnProperties': true,
-    }));
+        }));
         res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
