@@ -16,6 +16,7 @@ app.use(cors(corsOptions));
 
 let indexRouter = require('./routes/index');
 let neo4jRouter = require('./routes/neo4j');
+let thmdb = require('./routes/thmdb');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,5 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/movies', neo4jRouter);
 app.use('/recommendation', recombee);
+app.use('/thmdb', thmdb);
 
 module.exports = app;

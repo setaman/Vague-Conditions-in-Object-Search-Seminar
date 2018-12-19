@@ -19,11 +19,12 @@ module.exports.addMovie = (req, res) => {
 };
 
 module.exports.searchMovies = (req, res) => {
+    console.log(req.query.title);
     session
         .run('MATCH (movie:Movie) \
                 WHERE movie.title =~ {title} OR movie.original_title =~ {title}  \
                 RETURN movie',
-            {title: '(?i).*' + req.title.title + '.*'})
+            {title: '(?i).*' + req.query.title + '.*'})
         .then(result => {
             res.status(200).type('application/json').send(result.records);
         })

@@ -1,37 +1,110 @@
 <template>
-    <div class="movie-h-container">
-        <v-img
-                class="movie-h-poster"
-                height="278"
-                :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path"
-        >
-        </v-img>
-    <popularity-circle :popularity="6.1"/>
+    <div class="movie" :style="{'z-index': infoZIndex}">
+        <div class="movie-info" :class="{'info-expanded': expand}">
+            <movie-info :movie="movie"/>
+        </div>
+        <div class="movie-h-container elevation-5" :class="{expand: expand}">
+            <v-img
+                    class="movie-h-poster"
+                    height="278"
+                    :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path"
+            >
+            </v-img>
+            <div class="popularity">
+                <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
+            </div>
+            <div class="bookmark">
+                <v-btn icon flat color="error">
+                    <v-icon color="error">
+                        favorite_border
+                    </v-icon>
+                </v-btn>
+            </div>
+            <div class="details">
+                <v-btn icon color="white" @click="expand = !expand">
+                    <v-icon color="blue">
+                        {{expand ? 'chevron_left' : 'chevron_right'}}
+                    </v-icon>
+                </v-btn>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import PopularityCircle from "./PopularityCircle";
+    import MovieInfo from "./MovieInfo";
+
     export default {
         name: "MovieItemHorizontal",
-        components: {PopularityCircle},
+        components: {MovieInfo, PopularityCircle},
         props: ['movie'],
+        data: ()=>({
+            expand: false,
+
+        }),
+        computed: {
+            infoZIndex(){
+                if (this.expand) {
+                    return '5';
+                }
+                setTimeout(()=> '', 500);
+            }
+        }
     }
 </script>
 
 <style scoped lang="scss">
-    .movie-h-container {
+    .movie {
+        transition: 0.3s;
         display: inline-block;
-        margin: 16px;
+        margin: 8px;
+        width: 185px;
+        position: relative;
+        perspective: 1000px;
+        &:hover {
+            z-index: 5;
+        }
+    }
+    .movie-h-container {
+        transition: 0.3s;
+        display: inline-block;
         width: 185px;
         border-radius: 5px;
         overflow: hidden;
-        animation: item ease-in-out 10.5s 12;
+        animation: movie 1s ease-in-out;
         cursor: pointer;
+        position: relative;
         &:hover {
             .movie-h-poster {
                 transform: scale(1.1);
             }
+        }
+        &.expand {
+            z-index: 5;
+            transform: scale(1.1) rotateY(30deg) translateX(-10px);
+            perspective: 1000px;
+
+            .movie-h-poster {
+                filter: sepia(0.3) grayscale(0.2) brightness(0.9);
+            }
+        }
+
+        .popularity {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .bookmark {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+        .details {
+            opacity: 0.5;
+            position: absolute;
+            top: 42%;
+            right: 2px;
         }
     }
 
@@ -40,12 +113,32 @@
         filter: sepia(0.5) grayscale(0.3) brightness(0.7);
     }
 
-    @keyframes item {
+    .movie-info {
+        transition: 0.5s;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 185px;
+        height: 278px;
+        padding: 4px 0;
+        &.info-expanded{
+            width: 400px;
+            z-index: 5;
+            top: 0;
+            left: 165px;
+        }
+    }
+
+    @keyframes movie {
         0% {
+            height: 0;
+            opacity: 0;
             transform: scale(0);
         }
         0% {
             transform: scale(1);
+            opacity: 1;
+            height: 278px;
         }
     }
 

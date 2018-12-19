@@ -69,6 +69,7 @@
             transform-origin: 50% 50%;
             .inner-circle {
                 stroke: rgba(0, 0, 0, 0.56);
+                fill: rgba(0, 0, 0, 0.38);
             }
         }
 
