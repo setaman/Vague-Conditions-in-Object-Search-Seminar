@@ -14,10 +14,10 @@
                                 :search-input.sync="title"
                                 box
                                 chips
-                                color="blue-grey lighten-2"
+                                color="blue"
                                 label="Select"
                                 item-text="title"
-                                item-value="date"
+                                item-value="title"
                                 clearable
                                 :hide-details="true"
                                 hide-selected
@@ -63,8 +63,8 @@
                                 </v-list-tile>
                             </template>
                         </v-autocomplete>
-                        {{selected_movie}}
-                        MOVIES: {{movies}}
+                       <!-- {{selected_movie}}
+                        MOVIES: {{movies}}-->
                     </v-flex>
                 </v-form>
             </v-card>
@@ -108,17 +108,14 @@
                         .finally(() => this.is_loading = false);
 
                 }
-            }
+            },
+            selected_movies(movie){console.log(movie)},
         },
-
         methods: {
             remove(item) {
-                const index = this.selected_movie.indexOf(item.name)
+                const index = this.selected_movie.indexOf(item.title);
                 if (index >= 0) this.selected_movie.splice(index, 1)
             },
-            search() {
-
-            }
         }
     }
 </script>
