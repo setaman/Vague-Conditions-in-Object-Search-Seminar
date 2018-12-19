@@ -23,7 +23,7 @@ module.exports.searchMovies = (req, res) => {
         .run('MATCH (movie:Movie) \
                 WHERE movie.title =~ {title} OR movie.original_title =~ {title}  \
                 RETURN movie',
-            {title: '(?i).*' + req.body.query + '.*'})
+            {title: '(?i).*' + req.title.title + '.*'})
         .then(result => {
             res.status(200).type('application/json').send(result.records);
         })
