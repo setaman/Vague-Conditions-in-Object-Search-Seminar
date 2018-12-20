@@ -1,7 +1,7 @@
 <template>
     <v-layout wrap row>
         <movie-section-header header="Search result"/>
-        <v-flex xs12 style="padding: 100px">
+        <v-flex xs12 style="">
             <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
         </v-flex>
     </v-layout>

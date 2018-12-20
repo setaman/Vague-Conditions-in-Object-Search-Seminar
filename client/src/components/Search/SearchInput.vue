@@ -1,9 +1,10 @@
 <template>
-    <v-layout row wrap justify-center>
-        <v-flex xs12 sm8 md6>
+    <v-layout row wrap justify-center class="search-container">
+        <v-flex xs12 sm8 md6 class="search-container-flex">
             <v-card
-                    color="transparent"
+                    color="white"
                     dark
+                    class="pa-3 elevation-7"
             >
                 <v-form>
                     <v-flex xs12>
@@ -23,6 +24,7 @@
                                 hide-selected
                                 lable="Search movies"
                                 multiple
+                                light
                         >
                             <template
                                     slot="selection"
@@ -117,5 +119,13 @@
 </script>
 
 <style scoped>
+    .search-container {
+        position: relative;
+    }
+    .search-container-flex{
+        position: absolute;
+        top: -100px;
+        width: 100%;
+    }
 
 </style>
