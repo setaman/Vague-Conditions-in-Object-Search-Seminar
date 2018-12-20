@@ -63,8 +63,8 @@
                                 </v-list-tile>
                             </template>
                         </v-autocomplete>
-                       <!-- {{selected_movie}}
-                        MOVIES: {{movies}}-->
+                        <!-- {{selected_movie}}
+                         MOVIES: {{movies}}-->
                     </v-flex>
                 </v-form>
             </v-card>
@@ -93,10 +93,8 @@
             title(t) {
                 if (t && t.length > 2 /*&& t !== this.title*/) {
                     this.is_loading = true;
-                    console.log(t);
                     search(t)
                         .then(res => {
-                            console.log(res.data);
                             this.movies = res.data.map(movie => ({
                                 title: movie._fields[0].properties.original_title,
                                 poster: 'https://image.tmdb.org/t/p/original' + movie._fields[0].properties.poster_path,
@@ -106,10 +104,8 @@
                         })
                         .catch(e => console.log(e))
                         .finally(() => this.is_loading = false);
-
                 }
             },
-            selected_movies(movie){console.log(movie)},
         },
         methods: {
             remove(item) {

@@ -42,7 +42,6 @@
             progress() {
                 const normalizedRadius = (this.c_height/2)-(this.c_stroke*2);
                 const circumference = normalizedRadius * 2 * Math.PI;
-                console.log('Percent', this.percent());
                 return circumference - this.percent() / 100 * circumference;
             },
             circumference() {

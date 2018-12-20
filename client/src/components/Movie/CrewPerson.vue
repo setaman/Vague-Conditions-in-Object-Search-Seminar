@@ -2,21 +2,38 @@
     <div class="crew-person">
         <v-avatar>
             <img
-                    :src="'https://image.tmdb.org/t/p/original' + movie.profile_path"
-                    alt="person.name"
+                    :src="'https://image.tmdb.org/t/p/original' + person.profile_path || '/pG5LiannuUgZQLAd47iOnRkMIEC.jpg'"
+                    :alt="person.name"
             >
         </v-avatar>
-        <span>{{person.name}}</span>
+        <h4 class="crew-person-name">{{person.name}}</h4>
     </div>
 </template>
 
 <script>
     export default {
         name: "CrewPerson",
-        props: ['person']
+        props: ['person'],
+        computed: {
+            p(){
+                console.log('PERSON', this.person);
+                return this.person;
+            }
+        }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    .crew-person {
+        width: 100px;
+        height: 70px;
+        text-align: center;
+        display: inline-block;
+    }
+    .crew-person-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
 </style>

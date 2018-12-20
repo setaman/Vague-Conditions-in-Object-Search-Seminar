@@ -1,7 +1,7 @@
 <template>
     <div class="movie" :style="{'z-index': infoZIndex}">
         <div class="movie-info" :class="{'info-expanded': expand}">
-            <movie-info :movie="movie"/>
+            <movie-info :expanded="expand" :movie="movie"/>
         </div>
         <div class="movie-h-container elevation-5" :class="{expand: expand}">
             <v-img
