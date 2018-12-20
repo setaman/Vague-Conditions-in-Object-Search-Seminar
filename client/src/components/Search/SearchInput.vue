@@ -2,7 +2,7 @@
     <v-layout row wrap justify-center class="search-container">
         <v-flex xs12 sm8 md6 class="search-container-flex">
             <v-card
-                    color="white"
+                    color="gray"
                     dark
                     class="pa-3 elevation-7"
             >

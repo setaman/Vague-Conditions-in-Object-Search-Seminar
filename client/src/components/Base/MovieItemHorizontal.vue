@@ -10,13 +10,16 @@
                     :src="'https://image.tmdb.org/t/p/w185' + movie.poster_path"
             >
             </v-img>
+            <span class="prise">
+                12,05$
+            </span>
             <div class="popularity">
                 <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
             </div>
             <div class="bookmark">
-                <v-btn icon flat color="error">
+                <v-btn icon flat color="error" @click="favorite = !favorite">
                     <v-icon color="error">
-                        favorite_border
+                        {{favorite ? 'favorite' : 'favorite_border'}}
                     </v-icon>
                 </v-btn>
             </div>
@@ -41,7 +44,7 @@
         props: ['movie'],
         data: ()=>({
             expand: false,
-
+            favorite: false
         }),
         computed: {
             infoZIndex(){
@@ -90,6 +93,18 @@
             }
         }
 
+        .prise {
+            display: inline-block;
+            padding: 0 4px 0 15px;
+            background: rgba(188, 121, 45, 0.71);
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            right: 0;
+            clip-path: polygon(19% 0, 100% 0%, 100% 100%, 0% 100%);
+        }
+
         .popularity {
             position: absolute;
             top: 10px;
@@ -97,8 +112,8 @@
         }
         .bookmark {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
+            bottom: 0px;
+            left: 0px;
         }
         .details {
             opacity: 0.5;
@@ -109,7 +124,7 @@
     }
 
     .movie-h-poster {
-        transition: 0.3s;
+        transition: 0.5s;
         filter: sepia(0.5) grayscale(0.3) brightness(0.7);
     }
 

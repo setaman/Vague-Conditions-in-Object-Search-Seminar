@@ -16,7 +16,7 @@
         components: {MovieItemHorizontal, MovieSectionHeader},
         computed: {
             movies(){
-                return this.$store.getters.movies.splice(0, 20);
+                return this.$store.getters.movies.slice(0, 20);
             }
         }
     }
