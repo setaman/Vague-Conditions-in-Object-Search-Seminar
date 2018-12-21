@@ -200,11 +200,16 @@ router.post('/cart', async (req, res, next) => {
 // /////////////
 
 //ITEMS to USER
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
+    let options = req.query;
+    console.log(options);
     try {
-        let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user_id, 10, {
+        let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
             'returnProperties': true,
+            'scenario': options.scenario || 'homepage',
+            'minRelevance': options.relevance || 'medium',
+            'diversity': options.diversity || 0.0,
         }));
         res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
     } catch (e) {
