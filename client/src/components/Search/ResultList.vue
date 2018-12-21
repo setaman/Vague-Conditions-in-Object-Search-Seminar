@@ -1,6 +1,6 @@
 <template>
     <v-layout wrap row>
-        <movie-section-header header="Search result"/>
+        <section-header header="Search result"/>
         <v-flex xs12>
             <div class=" movies-list pa-3">
                 <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-    import MovieSectionHeader from "@/components/Home/MovieSectionHeader";
+    import SectionHeader from "@/components/Home/SectionHeader";
     import MovieItemHorizontal from "@/components/Movie/MovieItemHorizontal";
 
     export default {
         name: "ResultList",
-        components: {MovieItemHorizontal, MovieSectionHeader},
+        components: {MovieItemHorizontal, SectionHeader},
         computed: {
             movies() {
                 return this.$store.getters.movies.slice(0, 24);

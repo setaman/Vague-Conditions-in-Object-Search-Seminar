@@ -2,7 +2,7 @@
   <v-container fluid pa-0>
     <popular/>
     <search-input/>
-    <result-list/>
+    <result-list v-if="movies.length > 0"/>
   </v-container>
 
 </template>
@@ -24,6 +24,9 @@
       computed: {
         user() {
             return this.$store.state.user;
+        },
+        movies() {
+          return this.$store.getters.movies;
         },
       }
   }
