@@ -13,15 +13,18 @@ export default new Vuex.Store({
             token: localStorage.getItem("jwtToken"),
         },
         movies: [],
+        expanded_card: '',
     },
     getters: {
         isLoggedIn: () => !!localStorage.getItem("jwtToken"),
         movies: (state) => state.movies,
+        expanded_card: (state) => state.expanded_card,
     },
 
     mutations: {
         login: (state, user) => state.user = user,
         setMovies: (state, movies) => state.movies = movies,
+        setExpandedCard: (state, index) => state.expanded_card = index,
     },
     actions: {
         login({commit}, credentials) {
@@ -52,6 +55,9 @@ export default new Vuex.Store({
 
         setMovies({commit}, movies) {
             commit('setMovies', movies);
+        },
+        setExpandedCard({commit}, index) {
+            commit('setExpandedCard', index);
         }
     }
 })

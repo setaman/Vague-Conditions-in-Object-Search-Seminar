@@ -1,6 +1,6 @@
 <template>
     <div class="movie">
-        <div class="movie-h-container elevation-5" :class="{expand: expand}">
+        <div class="movie-h-container elevation-5" :class="{expand: expanded}">
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -21,15 +21,15 @@
                 </v-btn>
             </div>
             <div class="details">
-                <v-btn icon small color="white" @click="expand = !expand">
+                <v-btn icon small color="white" @click="expandCard">
                     <v-icon color="blue">
-                        {{expand ? 'expand_less' : 'expand_more'}}
+                        {{expanded ? 'expand_less' : 'expand_more'}}
                     </v-icon>
                 </v-btn>
             </div>
         </div>
-        <div class="movie-info" :class="{'info-expanded': expand}">
-            <movie-info :expanded="expand" :movie="movie"/>
+        <div class="movie-info" :class="{'info-expanded': expanded}">
+            <movie-info :expanded="expandCard" :movie="movie"/>
         </div>
     </div>
 </template>
@@ -46,7 +46,23 @@
             expand: false,
             favorite: false
         }),
-        computed: {}
+        methods: {
+          expandCard() {
+              if (this.$store.getters.expanded_card !== this.movie.uuid) {
+                  this.expand = true;
+              } else {
+                  this.expand = !this.expand;
+              }
+              console.log('---EXPAND', this.expand );
+              if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
+          }
+        },
+        computed: {
+            expanded() {
+                console.log('EXPANDED---', this.expand &&this.$store.getters.expanded_card === this.movie.uuid);
+                return this.expand && this.$store.getters.expanded_card === this.movie.uuid;
+            }
+        }
     }
 </script>
 
@@ -59,7 +75,7 @@
         position: relative;
         perspective: 1000px;
         &:hover {
-            z-index: 5;
+            z-index: 1;
         }
     }
     .movie-h-container {

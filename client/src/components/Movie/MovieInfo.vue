@@ -1,5 +1,5 @@
 <template>
-    <div class="info-container">
+    <div class="info-container" :class="{'info-container-expanded': expanded}">
         <transition name="fade">
             <div v-if="expanded" class="info-content">
                 <v-flex xs12>
@@ -77,6 +77,12 @@
         //background-color: #d7d7d7;
         display: inline-block;
         position: relative;
+        opacity: 0;
+        transition: 0.3s;
+        &.info-container-expanded{
+            transition: 0.7s;
+            opacity: 1;
+        }
     }
 
     .movie-title {
@@ -107,7 +113,7 @@
     }
 
     .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
+        transition: opacity .3s;
     }
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
