@@ -203,12 +203,13 @@ router.post('/cart', async (req, res, next) => {
 router.get('/', async (req, res) => {
     let options = req.query;
     console.log(options);
+    console.log(req.params);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
             'returnProperties': true,
             'scenario': options.scenario || 'homepage',
-            'minRelevance': options.relevance || 'medium',
+            'minRelevance': options.relevance || 'low',
             'diversity': options.diversity || 0.0,
         }));
         res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));

@@ -3,7 +3,7 @@
         <v-flex xs12>
             <section-header :header="'Top picks for you ' + user"/>
         </v-flex>
-        {{recommendedMovies()}}
+        <h3 v-for="movie in recommended">{{movie.title}}</h3>
     </v-layout>
 
 </template>
@@ -16,16 +16,26 @@
     export default {
         name: "TopPicks",
         components: {SectionHeader},
+        data:()=>({
+           recommended_movies: [],
+        }),
         methods: {
             async recommendedMovies() {
                 let recommended = await getRecommendedItems(this.$store.getters.user.id);
-                console.log(recommended.recomms);
-                return recommended.recomms;
+                this.recommended_movies.push(...recommended.data);
+                console.log(recommended.data);
+                return 'hui';
             }
+        },
+        mounted() {
+          this.recommendedMovies();
         },
         computed: {
             user() {
                 return this.$store.getters.user.name;
+            },
+            recommended() {
+                return this.recommended_movies;
             }
         }
     }
