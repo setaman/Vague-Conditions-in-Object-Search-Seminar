@@ -53,13 +53,11 @@
               } else {
                   this.expand = !this.expand;
               }
-              console.log('---EXPAND', this.expand );
               if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
           }
         },
         computed: {
             expanded() {
-                console.log('EXPANDED---', this.expand &&this.$store.getters.expanded_card === this.movie.uuid);
                 return this.expand && this.$store.getters.expanded_card === this.movie.uuid;
             }
         }
