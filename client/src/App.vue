@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app >
     <navigation-bar/>
     <v-content>
       <router-view/>
@@ -24,6 +24,8 @@ export default {
   @import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700');
   @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
+  $color: #030227;
+
   #app {
     font-family: 'Quicksand', sans-serif;
     //background: linear-gradient(to right, #141e30, #18263a);
@@ -31,6 +33,15 @@ export default {
       .v-btn.v-btn--outline {
           border: 2px solid!important;
       }
+  }
+  .v-select-list .v-list {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+  .theme--dark.v-text-field--box .v-input__slot {
+    background: hsla(0,0%,100%,.12);;
+  }
+  .v-overlay:before {
+    background-color: white !important;
   }
 </style>
 

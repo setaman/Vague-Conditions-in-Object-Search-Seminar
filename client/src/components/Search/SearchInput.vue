@@ -2,7 +2,7 @@
     <v-layout row wrap justify-center class="search-container">
         <v-flex xs12 sm8 md6 class="search-container-flex">
             <v-card
-                    color="gray"
+                    color="#122133"
                     dark
                     class="pa-3 elevation-7"
             >
@@ -24,7 +24,7 @@
                                 hide-selected
                                 lable="Search movies"
                                 multiple
-                                light
+                                dark
                         >
                             <template
                                     slot="selection"

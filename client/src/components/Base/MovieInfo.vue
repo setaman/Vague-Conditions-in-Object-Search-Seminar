@@ -46,12 +46,11 @@
 <script>
     import {getCredits} from "@/api/movies";
     import CrewPerson from "../Movie/CrewPerson";
-    import BtnPrim from "./BtnPrim";
     import GenreTag from "../Movie/GenreTag";
 
     export default {
         name: "MovieInfo",
-        components: {GenreTag, BtnPrim, CrewPerson},
+        components: {GenreTag, CrewPerson},
         data: () => ({
             directors: [],
             cast: [],

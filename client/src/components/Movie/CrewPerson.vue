@@ -26,7 +26,7 @@
 <style scoped lang="scss">
     .crew-person {
         margin-right: 3px;
-        max-width: 100px;
+        max-width: 99px;
         height: 70px;
         text-align: center;
         display: inline-block;

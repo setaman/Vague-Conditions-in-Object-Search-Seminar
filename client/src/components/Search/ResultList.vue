@@ -1,8 +1,10 @@
 <template>
     <v-layout wrap row>
         <movie-section-header header="Search result"/>
-        <v-flex xs12 style="">
-            <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
+        <v-flex xs12 >
+            <div class="horizontal-sroll">
+                <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
+            </div>
         </v-flex>
     </v-layout>
 
@@ -22,6 +24,15 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    .horizontal-sroll {
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
 </style>

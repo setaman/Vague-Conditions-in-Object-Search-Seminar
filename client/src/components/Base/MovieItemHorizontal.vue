@@ -1,5 +1,5 @@
 <template>
-    <div class="movie" :style="{'z-index': infoZIndex}">
+    <div class="movie">
         <div class="movie-info" :class="{'info-expanded': expand}">
             <movie-info :expanded="expand" :movie="movie"/>
         </div>
@@ -46,14 +46,7 @@
             expand: false,
             favorite: false
         }),
-        computed: {
-            infoZIndex(){
-                if (this.expand) {
-                    return '5';
-                }
-                setTimeout(()=> '', 500);
-            }
-        }
+        computed: {}
     }
 </script>
 

@@ -25,9 +25,6 @@
         user() {
             return this.$store.state.user;
         },
-        movies() {
-
-        }
       }
   }
 </script>

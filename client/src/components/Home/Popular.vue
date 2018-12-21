@@ -4,6 +4,7 @@
 
         <v-flex xs12 sm6>
             <v-img
+                    class="movie-poster"
                     height="400"
                     src="https://image.tmdb.org/t/p/original/aJn9XeesqsrSLKcHfHP4u5985hn.jpg"
             >
@@ -14,6 +15,7 @@
             <v-layout row wrap>
                 <v-flex xs12 sm6>
                     <v-img
+                            class="movie-poster"
                             height="200"
                             src="https://image.tmdb.org/t/p/original/6iUNJZymJBMXXriQyFZfLAKnjO6.jpg"
                     >
@@ -21,6 +23,7 @@
                 </v-flex>
                 <v-flex xs12 sm6>
                     <v-img
+                            class="movie-poster"
                             height="200"
                             src="https://image.tmdb.org/t/p/original/tZjVVIYXACV4IIIhXeIM59ytqwS.jpg"
                     >
@@ -29,6 +32,7 @@
 
                 <v-flex xs12 sm6>
                     <v-img
+                            class="movie-poster"
                             height="200"
                             src="https://image.tmdb.org/t/p/original/rFtsE7Lhlc2jRWF7SRAU0fvrveQ.jpg"
                     >
@@ -36,6 +40,7 @@
                 </v-flex>
                 <v-flex xs12 sm6>
                     <v-img
+                            class="movie-poster"
                             height="200"
                             src="https://image.tmdb.org/t/p/original/3QtzZ7FHHxWNeUZvXZfk3e3oxDm.jpg"
                     >
@@ -81,6 +86,11 @@
         height: 20px;
         background-color: #141e30;
 
+    }
+
+    .movie-poster {
+        transition: 0.5s;
+        filter: sepia(0.2) grayscale(0.1) brightness(0.7);
     }
 
 </style>
