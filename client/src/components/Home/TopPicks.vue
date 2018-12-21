@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap class="toppicks-container">
-        <v-flex xs12>
+        <v-flex xs12 mt-4>
             <section-header :header="'Top picks for you ' + user"/>
             <v-progress-linear
                     v-if="is_loading"
@@ -41,7 +41,9 @@
                     let result = await Promise.all(promises);
 
                     console.log(result[0].data[0]._fields[0].properties);
-                    this.recommended_movies.push(...result.map(res => res.data[0]._fields[0].properties));
+                    this.recommended_movies.push(...result.map(res => {
+                        if(res.data.length>0) return res.data[0]._fields[0].properties;
+                    }));
                 } catch (e) {
                     console.log(e);
                 } finally {
