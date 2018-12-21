@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import { login, signup } from '@/api';
 import axios from 'axios';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
@@ -11,13 +11,17 @@ export default new Vuex.Store({
             name: localStorage.getItem("name"),
             id: localStorage.getItem("id"),
             token: localStorage.getItem("jwtToken"),
-        }
+        },
+        movies: [],
     },
     getters: {
-        isLoggedIn: () => !!localStorage.getItem("jwtToken")
+        isLoggedIn: () => !!localStorage.getItem("jwtToken"),
+        movies: (state) => state.movies,
     },
+
     mutations: {
-        login: (state, user) => state.user = user
+        login: (state, user) => state.user = user,
+        setMovies: (state, movies) => state.movies = movies,
     },
     actions: {
         login({commit}, credentials) {
@@ -35,15 +39,19 @@ export default new Vuex.Store({
                     throw error;
                 });
         },
-        async signup({dispatch}, credentials) {
+        async signup({commit}, credentials) {
             try {
                 let response = await signup(credentials);
                 console.log(response.data);
-                return dispatch('login', credentials)
+                return commit('login', credentials)
             } catch (error) {
                 console.error(error);
                 throw error
             }
+        },
+
+        setMovies({commit}, movies) {
+            commit('setMovies', movies);
         }
     }
 })
