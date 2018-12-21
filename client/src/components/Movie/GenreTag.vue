@@ -21,7 +21,7 @@
         border-radius: 5px;
         color: white;
         margin: 2px;
-        background: #979797;
+        background: #25527e;
     }
 
 </style>

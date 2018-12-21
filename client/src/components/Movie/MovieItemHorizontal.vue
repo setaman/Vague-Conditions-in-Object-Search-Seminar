@@ -1,9 +1,6 @@
 <template>
     <div class="movie">
-        <div class="movie-info" :class="{'info-expanded': expand}">
-            <movie-info :expanded="expand" :movie="movie"/>
-        </div>
-        <div class="movie-h-container elevation-5" :class="{expand: expand}">
+        <div class="movie-h-container elevation-5" :class="{expand: expanded}">
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -24,18 +21,21 @@
                 </v-btn>
             </div>
             <div class="details">
-                <v-btn icon color="white" @click="expand = !expand">
+                <v-btn icon small color="white" @click="expandCard">
                     <v-icon color="blue">
-                        {{expand ? 'chevron_left' : 'chevron_right'}}
+                        {{expanded ? 'expand_less' : 'expand_more'}}
                     </v-icon>
                 </v-btn>
             </div>
+        </div>
+        <div class="movie-info" :class="{'info-expanded': expanded}">
+            <movie-info :expanded="expandCard" :movie="movie"/>
         </div>
     </div>
 </template>
 
 <script>
-    import PopularityCircle from "./PopularityCircle";
+    import PopularityCircle from "../Base/PopularityCircle";
     import MovieInfo from "./MovieInfo";
 
     export default {
@@ -46,7 +46,21 @@
             expand: false,
             favorite: false
         }),
-        computed: {}
+        methods: {
+          expandCard() {
+              if (this.$store.getters.expanded_card !== this.movie.uuid) {
+                  this.expand = true;
+              } else {
+                  this.expand = !this.expand;
+              }
+              if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
+          }
+        },
+        computed: {
+            expanded() {
+                return this.expand && this.$store.getters.expanded_card === this.movie.uuid;
+            }
+        }
     }
 </script>
 
@@ -54,12 +68,12 @@
     .movie {
         transition: 0.3s;
         display: inline-block;
-        margin: 8px;
+        margin: 8px 12px;
         width: 185px;
         position: relative;
         perspective: 1000px;
         &:hover {
-            z-index: 5;
+            z-index: 1;
         }
     }
     .movie-h-container {
@@ -78,7 +92,7 @@
         }
         &.expand {
             z-index: 5;
-            transform: scale(1.1) rotateY(30deg) translateX(-10px);
+            transform: scale(1.1) rotateX(-30deg) translateY(-10px);
             perspective: 1000px;
 
             .movie-h-poster {
@@ -111,8 +125,8 @@
         .details {
             opacity: 0.5;
             position: absolute;
-            top: 42%;
-            right: 2px;
+            bottom: 0;
+            right: 0;
         }
     }
 
@@ -123,15 +137,13 @@
 
     .movie-info {
         transition: 0.5s;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 185px;
-        height: 278px;
-        padding: 4px 0;
+        position: static;
+        height: 0;
+        width: 420px;
         &.info-expanded{
-            width: 400px;
+            margin: 16px 0 16px 0;
             z-index: 5;
+            height: 278px;
             top: 0;
             left: 165px;
         }

@@ -1,38 +1,35 @@
 <template>
     <v-layout wrap row>
         <movie-section-header header="Search result"/>
-        <v-flex xs12 >
-            <div class="horizontal-sroll">
+        <v-flex xs12>
+            <div class=" movies-list pa-3">
                 <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
             </div>
         </v-flex>
     </v-layout>
-
 </template>
 
 <script>
-    import MovieSectionHeader from "../Home/MovieSectionHeader";
-    import MovieItemHorizontal from "../Base/MovieItemHorizontal";
+    import MovieSectionHeader from "@/components/Home/MovieSectionHeader";
+    import MovieItemHorizontal from "@/components/Movie/MovieItemHorizontal";
+
     export default {
         name: "ResultList",
         components: {MovieItemHorizontal, MovieSectionHeader},
         computed: {
-            movies(){
-                return this.$store.getters.movies.slice(0, 20);
+            movies() {
+                return this.$store.getters.movies.slice(0, 24);
             }
         }
     }
 </script>
 
 <style scoped lang="scss">
-    .horizontal-sroll {
+    .movies-list {
+        display: flex;
+        justify-content: space-around;
         width: 100%;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-        &::-webkit-scrollbar {
-            display: none;
-        }
+        flex-wrap: wrap;
+        flex-basis: 185px;
     }
-
 </style>
