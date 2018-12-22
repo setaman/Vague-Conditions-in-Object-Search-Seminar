@@ -2,7 +2,9 @@
     <v-toolbar dark color="#122133" fixed app>
         <v-toolbar-side-icon></v-toolbar-side-icon>
 
-        <v-toolbar-title class="white--text">FILMIX</v-toolbar-title>
+        <v-toolbar-title class="white--text">
+            <router-link to="/">FILMIX</router-link>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
 

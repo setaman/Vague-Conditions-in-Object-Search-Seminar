@@ -3,8 +3,8 @@
 
         <v-progress-linear :indeterminate="true" height="2" v-if="is_loading" class="ma-0"></v-progress-linear>
 
-        <v-layout row wrap>
-            <v-flex offset-md1 offset-lg1 offset-xl2 xs12 sm12 md10 lg10 xl8>
+        <v-layout row wrap v-else>
+            <v-flex offset-lg1 offset-xl2 xs12 sm12 md12 lg10 xl8>
                 <backdrop :movie="movie"/>
 
             </v-flex>
@@ -28,14 +28,19 @@
         props: ['id'],
         data: () => ({
             movie: null,
-            is_loading: false
+            is_loading: true
         }),
         methods: {
             async requestMovie() {
+                console.log('1');
                 try {
+                    console.log('2');
+
                     let response = await getMovieById(this.id);
+                    console.log('3');
+
                     this.movie = response.data[0]._fields[0].properties;
-                    //console.log(response.data[0]._fields[0].properties);
+                    console.log(response.data[0]._fields[0].properties);
                 } catch (e) {
                     console.log(e);
                 } finally {
@@ -44,8 +49,12 @@
             }
         },
         mounted() {
-            this.is_loading = true;
-            setTimeout(this.requestMovie, 1000);
+            console.log('MOUNTED');
+            //setTimeout(this.requestMovie, 1000);
+            this.requestMovie();
+        },
+        beforeDestroy() {
+            console.log('DESTORY');
         },
         computed: {
             /*movie() {

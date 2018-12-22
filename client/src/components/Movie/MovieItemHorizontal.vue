@@ -1,6 +1,7 @@
 <template>
     <div class="movie">
-        <div class="movie-h-container elevation-5" :class="{expand: expanded}" @click="goToDetails">
+        <div class="movie-h-container elevation-5" :class="{expand: expanded}">
+            <a class="to-details" @click="goToDetails()"></a>
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -127,18 +128,30 @@
             position: absolute;
             top: 10px;
             left: 10px;
+            z-index: 2;
         }
         .bookmark {
             position: absolute;
-            bottom: 0px;
-            left: 0px;
+            bottom: 0;
+            left: 0;
+            z-index: 2
         }
         .details {
             opacity: 0.5;
             position: absolute;
             bottom: 0;
             right: 0;
+            z-index: 2
         }
+    }
+
+    .to-details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 278px;
+        width: 185px;
+        z-index: 1;
     }
 
     .movie-h-poster {
