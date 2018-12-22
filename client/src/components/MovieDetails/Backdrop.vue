@@ -3,7 +3,7 @@
         <v-img
                 class="backdrop-poster"
                 height="500"
-                src="https://image.tmdb.org/t/p/original/aJn9XeesqsrSLKcHfHP4u5985hn.jpg"
+                :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path"
         >
         </v-img>
         <!--<div class="xs12 popular-gradient-overlay">
