@@ -26,7 +26,7 @@
                 <v-flex xs12 class="movie-controls mt-3">
                     <v-layout>
                         <v-flex xs6 pa-1>
-                            <v-btn round outline color="primary" block>
+                            <v-btn target="_blank" :to="'movie/'+movie.uuid" round outline color="primary" block>
                                 more details
                             </v-btn>
                         </v-flex>
@@ -62,8 +62,10 @@
                 this.is_loading = true;
                 try {
                     let res = await getCredits(this.movie.tmdb_id);
-                    this.directors = res.data.crew.filter(person => person.job === 'Director')
-                    this.cast = res.data.cast.slice(0, 4);
+                    if (res.data) {
+                        //this.directors = res.data.crew.filter(person => person.job === 'Director');
+                        this.cast = res.data.cast.slice(0, 4);
+                    }
                 }catch (e) {
                     console.log(e);
                 } finally {

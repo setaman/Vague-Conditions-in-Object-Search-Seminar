@@ -1,7 +1,7 @@
 <template>
     <div class="movie">
         <div class="movie-h-container elevation-5" :class="{expand: expanded}">
-            <a class="to-details" @click="goToDetails()"></a>
+            <router-link class="to-details" target="_blank" :to="'movie/'+movie.uuid" ></router-link>
             <v-img
                     class="movie-h-poster"
                     height="278"
