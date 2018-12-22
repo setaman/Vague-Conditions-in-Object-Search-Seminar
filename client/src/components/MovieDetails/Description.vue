@@ -136,6 +136,7 @@
 
 <style scoped lang="scss">
     .desc-container {
+        margin-top: 15%;
         position: relative;
     }
 

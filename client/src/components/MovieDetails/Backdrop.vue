@@ -1,6 +1,8 @@
 <template>
     <div class="backdrop-container">
         <v-img
+                :style="opacity"
+                v-scroll="onScroll"
                 class="backdrop-poster"
                 height="500"
                 :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path"
@@ -28,16 +30,30 @@
         name: "Backdrop",
         props:['movie'],
         data:()=>({
-            poster: ':src="\'https://image.tmdb.org/t/p/w185\' + movie.backdrop_path"'
+            offsetTop: 0
         }),
+        methods: {
+            onScroll (e) {
+                this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
+                console.log(1 - ((this.offsetTop/2)/100).toFixed(1));
+            }
+        },
+        computed:{
+            opacity() {
+                return {
+                    opacity: `${1 - ((this.offsetTop/2)/100).toFixed(1)}`
+                }
+            }
+        }
     }
 </script>
 
 <style scoped lang="scss">
     .backdrop-container {
-        position: relative;
+        position: fixed;
         width: 100%;
         height: 500px;
+        transition: 0.1s;
     }
     .popular-gradient-overlay {
         width: 100%;

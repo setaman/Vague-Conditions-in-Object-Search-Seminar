@@ -3,12 +3,14 @@
 
         <v-progress-linear :indeterminate="true" height="2" v-if="is_loading" class="ma-0"></v-progress-linear>
 
-        <v-layout row wrap v-if="!is_loading">
-            <v-flex offset-lg1 offset-xl2 xs12 sm12 md12 lg10 xl8>
+        <v-layout row wrap v-if="!is_loading" >
+            <v-flex class="backdrop" offset-lg1 offset-xl2 xs12 sm12 md12 lg10 xl8>
                 <backdrop :movie="movie"/>
             </v-flex>
         </v-layout>
         <description v-if="!is_loading" :movie="movie"/>
+        <similar/>
+        <top-picks/>
     </v-container>
 </template>
 
@@ -16,10 +18,12 @@
     import {getMovieById} from "@/api/movies";
     import Backdrop from "../components/MovieDetails/Backdrop";
     import Description from "../components/MovieDetails/Description";
+    import Similar from "../components/MovieDetails/Similar";
+    import TopPicks from "../components/Home/TopPicks";
 
     export default {
         name: "MovieDetails",
-        components: {Description, Backdrop},
+        components: {TopPicks, Similar, Description, Backdrop},
         props: ['id'],
         data: () => ({
             movie: null,
@@ -53,8 +57,12 @@
 <style scoped lang="scss">
     .movie-details-container {
         position: relative;
-
-
+        .backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
     }
     .movie-details-poster {
         //min-width: 300px;

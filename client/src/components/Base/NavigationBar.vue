@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar dark color="#122133" fixed app>
+    <v-toolbar dark color="#122133" fixed app id="navbar">
         <v-toolbar-side-icon></v-toolbar-side-icon>
 
         <v-toolbar-title class="white--text">
@@ -33,5 +33,8 @@
 </script>
 
 <style scoped>
+    #navbar{
+        z-index: 100;
+    }
 
 </style>
