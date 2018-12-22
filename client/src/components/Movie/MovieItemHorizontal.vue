@@ -8,7 +8,7 @@
             >
             </v-img>
             <span class="prise">
-                12,05$
+                {{generatePrise()}}$
             </span>
             <div class="popularity">
                 <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
@@ -54,7 +54,10 @@
                   this.expand = !this.expand;
               }
               if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
-          }
+          },
+            generatePrise() {
+              return (Math.random() * (20 - 1) + 1).toFixed(2);
+            }
         },
         computed: {
             expanded() {

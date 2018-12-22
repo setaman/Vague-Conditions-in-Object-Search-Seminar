@@ -2,7 +2,8 @@
   <v-container fluid pa-0>
     <popular/>
     <search-input/>
-    <result-list/>
+    <result-list v-if="movies.length > 0"/>
+    <top-picks/>
   </v-container>
 
 </template>
@@ -11,9 +12,11 @@
   import SearchInput from "../components/Search/SearchInput";
   import Popular from "../components/Home/Popular";
   import ResultList from "../components/Search/ResultList";
+  import TopPicks from "../components/Home/TopPicks";
 
   export default {
     components: {
+      TopPicks,
       ResultList,
       Popular,
       SearchInput,
@@ -24,6 +27,9 @@
       computed: {
         user() {
             return this.$store.state.user;
+        },
+        movies() {
+          return this.$store.getters.movies;
         },
       }
   }

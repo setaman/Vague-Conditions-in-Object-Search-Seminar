@@ -4,10 +4,14 @@ export function getItems (){
     return axios('http://localhost:3000/recommendation/items');
 }
 
-export function getRecommendedItems (user_id){
-    return axios('http://localhost:3000/recommendation/recommendeditems', {
+export function getRecommendedItems (user_id, count = 10, scenario = 'homepage', relevance = 'low', diversity = 0.0){
+    return axios.get('http://localhost:3000/recommendation/', {
         params: {
-            user_id
+            user_id,
+            scenario,
+            count,
+            diversity,
+            relevance,
         }
     });
 }

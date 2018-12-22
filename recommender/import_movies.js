@@ -1,13 +1,13 @@
 const fs = require('fs');
 const axios = require('axios');
 const movies = JSON.parse(fs.readFileSync('./movies/neo4j.json'));
-const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee.json'));
+const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee_100s.json'));
 const log = require('./logger');
 
 let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
 
 Promise.all(promises)
-    .then(res => console.log('ADDED', res.response.data))
+    .then(res => console.log('ADDED', res.data))
     .catch(error => console.error('IMPORT PROMISES', error.response.data));
 
 let properties = [
@@ -32,21 +32,19 @@ let properties = [
     {release_date: 'string'},
 ];
 
-axios.post('http://localhost:3000/recommendation/items/properties', properties)
+//let recombee_promises = movies_recombee.map(movie_100s => axios.post('http://localhost:3000/recommendation/items', movie_100s));
+
+/*axios.post('http://localhost:3000/recommendation/items/properties', properties)
     .then(() => {
        log.info('Recommender add properties', 'Properties added!');
-       console.log(movies_recombee[128]);
-       axios.post('http://localhost:3000/recommendation/items', [movies_recombee[128], movies_recombee[1], movies_recombee[2]])
-           .then(() => log.info('Recommender', 'Items added!'))
-           .catch((error) => {
-               log.error('Recommender add items', 'Some error occurred');
-               console.log('Error', error.response.data);
-           });
+        Promise.all(recombee_promises)
+            .then(res => console.log('ADDED ITEMS', res.response.data))
+            .catch(error => console.error('FAILED', error.response.data));
     })
     .catch((error) => {
         log.error('Recommender', 'Some error occurred');
         console.log('Error', error.response.data);
-    });
+    });*/
 
 /*
 const getGenres = movie => `${movie.genres.map(genre => genre.name).join(', ')}`;

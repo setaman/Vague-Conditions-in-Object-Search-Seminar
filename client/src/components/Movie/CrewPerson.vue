@@ -2,8 +2,12 @@
     <div class="crew-person">
         <v-avatar size="35px">
             <img
-                    :src="'https://image.tmdb.org/t/p/original' + person.profile_path || '/pG5LiannuUgZQLAd47iOnRkMIEC.jpg'"
-                    :alt="person.name"
+                    v-if="img"
+                    :src="'https://image.tmdb.org/t/p/original' + person.profile_path"
+            >
+            <img
+                    v-else
+                    src="@/assets/logo.svg"
             >
         </v-avatar>
         <h4 class="crew-person-name">{{person.name}}</h4>
@@ -15,9 +19,8 @@
         name: "CrewPerson",
         props: ['person'],
         computed: {
-            p(){
-                console.log('PERSON', this.person);
-                return this.person;
+            img() {
+                return this.person.profile_path;
             }
         }
     }

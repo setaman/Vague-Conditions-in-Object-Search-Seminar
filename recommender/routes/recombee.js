@@ -48,9 +48,6 @@ router.post('/items', async (req, res, next) => {
         }
         return new rqs.SetItemValues(generated_item_id, generated_item_values, {'cascadeCreate': true});
     });
-
-    console.log('ARR rEQ', requests);
-
     try {
         await client.send(new rqs.Batch(requests));
         res.status(200).send('Items added!');
@@ -102,7 +99,7 @@ router.post('/users/properties', async (req, res, next) => {
     }
 });
 
-router.post('/users/values', async (req, res, next) => {
+router.post('/users', async (req, res, next) => {
     let requests = req.body.map((user) => {
 
         let generated_user_values = {};
@@ -203,11 +200,17 @@ router.post('/cart', async (req, res, next) => {
 // /////////////
 
 //ITEMS to USER
-router.get('/recommendeditems', async (req, res, next) => {
+router.get('/', async (req, res) => {
+    let options = req.query;
+    console.log(options);
+    console.log(req.params);
     try {
-        let recommended_items = await client.send(new rqs.RecommendItemsToUser(req.params.user_id, 10, {
+        let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
             'returnProperties': true,
+            'scenario': options.scenario || 'homepage',
+            'minRelevance': options.relevance || 'low',
+            'diversity': options.diversity || 0.0,
         }));
         res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
     } catch (e) {

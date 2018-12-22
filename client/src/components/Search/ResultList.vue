@@ -1,21 +1,22 @@
 <template>
     <v-layout wrap row>
-        <movie-section-header header="Search result"/>
+        <section-header header="Search result"/>
         <v-flex xs12>
-            <div class=" movies-list pa-3">
+            <movies-list-container>
                 <movie-item-horizontal v-for="(movie, n) in movies" :key="n" :movie="movie"/>
-            </div>
+            </movies-list-container>
         </v-flex>
     </v-layout>
 </template>
 
 <script>
-    import MovieSectionHeader from "@/components/Home/MovieSectionHeader";
+    import SectionHeader from "@/components/Home/SectionHeader";
     import MovieItemHorizontal from "@/components/Movie/MovieItemHorizontal";
+    import MoviesListContainer from "../Movie/MoviesListContainer";
 
     export default {
         name: "ResultList",
-        components: {MovieItemHorizontal, MovieSectionHeader},
+        components: {MoviesListContainer, MovieItemHorizontal, SectionHeader},
         computed: {
             movies() {
                 return this.$store.getters.movies.slice(0, 24);
@@ -25,11 +26,4 @@
 </script>
 
 <style scoped lang="scss">
-    .movies-list {
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        flex-wrap: wrap;
-        flex-basis: 185px;
-    }
 </style>

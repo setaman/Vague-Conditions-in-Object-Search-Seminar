@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: "MovieSectionHeader",
+        name: "SectionHeader",
         data :()=>({
 
         }),

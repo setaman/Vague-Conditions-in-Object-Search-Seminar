@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { login, signup } from '@/api';
+import { login, signup } from '@/api/recommender';
 import axios from 'axios';
 
 Vue.use(Vuex);
@@ -17,6 +17,7 @@ export default new Vuex.Store({
     },
     getters: {
         isLoggedIn: () => !!localStorage.getItem("jwtToken"),
+        user: (state) => state.user,
         movies: (state) => state.movies,
         expanded_card: (state) => state.expanded_card,
     },
