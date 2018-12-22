@@ -10,7 +10,8 @@ module.exports = {
     neo4j_user: 'neo4j',
     neo4j_pass: 'admin',
     recommbe_db: 'database_name',
-    recommbe_token: 'token'
+    recommbe_token: 'token',
+    tmdb_key: 'api_key',
 };
 ```
 

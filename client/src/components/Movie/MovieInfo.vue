@@ -31,7 +31,7 @@
                         </v-flex>
                         <v-flex xs6 pa-1>
                             <v-btn round color="primary" block>
-                                by for 12,50$
+                                by for {{price}}$
                             </v-btn>
                         </v-flex>
                     </v-layout>
@@ -53,7 +53,7 @@
             directors: [],
             cast: [],
         }),
-        props: ['movie', 'expanded'],
+        props: ['movie', 'expanded', 'price'],
         methods: {
             async director() {
                 let res = await getCredits(this.movie.tmdb_id);

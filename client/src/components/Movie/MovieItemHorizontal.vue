@@ -8,7 +8,7 @@
             >
             </v-img>
             <span class="prise">
-                {{generatePrise()}}$
+                {{price}}$
             </span>
             <div class="popularity">
                 <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="movie-info" :class="{'info-expanded': expanded}">
-            <movie-info :expanded="expandCard" :movie="movie"/>
+            <movie-info :expanded="expandCard" :movie="movie" :price="price"/>
         </div>
     </div>
 </template>
@@ -44,7 +44,8 @@
         props: ['movie'],
         data: ()=>({
             expand: false,
-            favorite: false
+            favorite: false,
+            price: 0,
         }),
         methods: {
           expandCard() {
@@ -56,8 +57,11 @@
               if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
           },
             generatePrise() {
-              return (Math.random() * (20 - 1) + 1).toFixed(2);
+              this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
             }
+        },
+        mounted() {
+            this.generatePrise();
         },
         computed: {
             expanded() {
