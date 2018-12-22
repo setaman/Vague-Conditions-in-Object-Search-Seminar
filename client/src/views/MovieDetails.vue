@@ -32,15 +32,10 @@
         }),
         methods: {
             async requestMovie() {
-                console.log('1');
                 try {
-                    console.log('2');
-
                     let response = await getMovieById(this.id);
-                    console.log('3');
-
                     this.movie = response.data[0]._fields[0].properties;
-                    console.log(response.data[0]._fields[0].properties);
+                    //console.log(response.data[0]._fields[0].properties);
                 } catch (e) {
                     console.log(e);
                 } finally {

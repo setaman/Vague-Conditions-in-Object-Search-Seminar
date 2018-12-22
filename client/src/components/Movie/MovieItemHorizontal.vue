@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="movie-info" :class="{'info-expanded': expanded}">
-            <movie-info :expanded="expandCard" :movie="movie" :price="price"/>
+            <movie-info :expanded="expanded" :movie="movie" :price="price"/>
         </div>
     </div>
 </template>

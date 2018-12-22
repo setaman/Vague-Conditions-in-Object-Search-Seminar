@@ -14,6 +14,7 @@
                     <h3 class="movie-group-header mt-2 mb-2">
                         cast
                     </h3>
+                    <v-progress-linear :indeterminate="true" height="2" v-if="is_loading" class="ma-0"></v-progress-linear>
                     <crew-person v-for="(person, i) in cast" :key="i" :person="person"/>
                 </v-flex>
                 <v-flex xs12>
@@ -38,6 +39,7 @@
                 </v-flex>
             </div>
         </transition>
+        {{wasExpanded}}
     </div>
 </template>
 
@@ -52,19 +54,41 @@
         data: () => ({
             directors: [],
             cast: [],
+            is_loading: false,
         }),
         props: ['movie', 'expanded', 'price'],
         methods: {
-            async director() {
-                let res = await getCredits(this.movie.tmdb_id);
-                this.directors = res.data.crew.filter(person => person.job === 'Director')
-                this.cast = res.data.cast.slice(0, 4);
+            async getCast() {
+                this.is_loading = true;
+                try {
+                    let res = await getCredits(this.movie.tmdb_id);
+                    this.directors = res.data.crew.filter(person => person.job === 'Director')
+                    this.cast = res.data.cast.slice(0, 4);
+                }catch (e) {
+                    console.log(e);
+                } finally {
+                    this.is_loading = false;
+                }
             }
         },
         mounted() {
-            this.director();
         },
-        computed: {}
+        destroyed() {
+        },
+        watch:{
+          expanded(){
+
+          }
+        },
+        computed: {
+           wasExpanded(){
+               if (this.expanded && this.cast.length < 1) {
+                   console.log('LOAD');
+                   this.getCast();
+               }
+               return '';
+           }
+        }
     }
 </script>
 
