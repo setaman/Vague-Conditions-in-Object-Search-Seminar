@@ -24,7 +24,10 @@
     "passport-local": "^1.0.0"
   },
   "nodemonConfig": {
-    "ignore": ["test/*", "node_modueles/*"],
+    "ignore": [
+      "test/*",
+      "node_modueles/*"
+    ],
     "delay": "2500"
   }
 }

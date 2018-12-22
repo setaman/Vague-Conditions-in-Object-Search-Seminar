@@ -203,7 +203,6 @@ router.post('/cart', async (req, res, next) => {
 router.get('/', async (req, res) => {
     let options = req.query;
     console.log(options);
-    console.log(req.params);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,

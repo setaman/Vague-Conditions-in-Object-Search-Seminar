@@ -1,6 +1,19 @@
 # Vague-Conditions-in-Object-Search-Seminar
 Context Based Recommendation demo
 
+### Creds
+
+`/recommender/creds.js`
+
+```javascript
+module.exports = {
+    neo4j_user: 'neo4j',
+    neo4j_pass: 'admin',
+    recommbe_db: 'database_name',
+    recommbe_token: 'token'
+};
+```
+
 ### Run services with docker-compose
 ```
 sudo docker-compose up -d
