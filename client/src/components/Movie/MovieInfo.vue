@@ -77,11 +77,6 @@
         },
         destroyed() {
         },
-        watch:{
-          expanded(){
-
-          }
-        },
         computed: {
            wasExpanded(){
                if (this.expanded && this.cast.length < 1) {

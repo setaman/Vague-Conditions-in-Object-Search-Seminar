@@ -3,32 +3,31 @@
 
         <v-progress-linear :indeterminate="true" height="2" v-if="is_loading" class="ma-0"></v-progress-linear>
 
-        <v-layout row wrap v-else>
+        <v-layout row wrap v-if="!is_loading">
             <v-flex offset-lg1 offset-xl2 xs12 sm12 md12 lg10 xl8>
                 <backdrop :movie="movie"/>
-
-            </v-flex>
-            <v-flex xs12>
-                movie id: {{movie ? movie.uuid : 'LOADING'}}
-
-                <h1 class="info">IDDDD: {{id}}</h1>
-
             </v-flex>
         </v-layout>
+        <description v-if="!is_loading" :movie="movie"/>
     </v-container>
 </template>
 
 <script>
     import {getMovieById} from "@/api/movies";
     import Backdrop from "../components/MovieDetails/Backdrop";
+    import Description from "../components/MovieDetails/Description";
 
     export default {
         name: "MovieDetails",
-        components: {Backdrop},
+        components: {Description, Backdrop},
         props: ['id'],
         data: () => ({
             movie: null,
-            is_loading: true
+            is_loading: true,
+            is_loading_credits: true,
+            directors: [],
+            cast: [],
+            price: 0,
         }),
         methods: {
             async requestMovie() {
@@ -41,27 +40,26 @@
                 } finally {
                     this.is_loading = false;
                 }
-            }
+            },
         },
         mounted() {
-            console.log('MOUNTED');
-            //setTimeout(this.requestMovie, 1000);
             this.requestMovie();
         },
-        beforeDestroy() {
-            console.log('DESTORY');
-        },
-        computed: {
-            /*movie() {
-                return this.movie
-            }*/
-        }
+        beforeDestroy() {},
+        computed: {}
     }
 </script>
 
 <style scoped lang="scss">
     .movie-details-container {
         position: relative;
+
+
+    }
+    .movie-details-poster {
+        //min-width: 300px;
+        border-radius: 5px;
+        filter: sepia(0.3) grayscale(0.1) brightness(0.7);
     }
     .backdrop {
         position: absolute;
