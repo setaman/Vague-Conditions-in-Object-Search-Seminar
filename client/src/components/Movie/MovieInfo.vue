@@ -26,7 +26,7 @@
                 <v-flex xs12 class="movie-controls mt-3">
                     <v-layout>
                         <v-flex xs6 pa-1>
-                            <v-btn target="_blank" :to="'movie/'+movie.uuid" round outline color="primary" block>
+                            <v-btn target="_blank" :to="{ name: 'movie', params: { id: this.movie.uuid}}" round outline color="primary" block>
                                 more details
                             </v-btn>
                         </v-flex>

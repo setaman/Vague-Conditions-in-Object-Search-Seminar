@@ -4,7 +4,7 @@
                 :style="opacity"
                 v-scroll="onScroll"
                 class="backdrop-poster"
-                height="500"
+                height="600"
                 :src="'https://image.tmdb.org/t/p/original' + movie.backdrop_path"
         >
         </v-img>
@@ -35,13 +35,14 @@
         methods: {
             onScroll (e) {
                 this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
-                console.log(1 - ((this.offsetTop/2)/100).toFixed(1));
+                //console.log(1 - ((this.offsetTop/2)/100).toFixed(1));
             }
         },
         computed:{
             opacity() {
+                let opacity = 1 - ((this.offsetTop/2)/100).toFixed(1);
                 return {
-                    opacity: `${1 - ((this.offsetTop/2)/100).toFixed(1)}`
+                    opacity: `${opacity >= 0.3 ? opacity : 0.2}`
                 }
             }
         }
@@ -51,8 +52,8 @@
 <style scoped lang="scss">
     .backdrop-container {
         position: fixed;
-        width: 100%;
-        height: 500px;
+        width: 80%;
+        height: 600px;
         transition: 0.1s;
     }
     .popular-gradient-overlay {

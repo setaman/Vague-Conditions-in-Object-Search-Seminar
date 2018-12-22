@@ -5,7 +5,7 @@
             <v-layout row wrap>
                 <v-flex xs12 sm4 md3 mb-5 >
 
-                    <div class="desc-poster">
+                    <div class="desc-poster elevation-20">
                         <v-img
                                 class="movie-details-poster"
                                 :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
@@ -136,7 +136,7 @@
 
 <style scoped lang="scss">
     .desc-container {
-        margin-top: 15%;
+        margin-top: 20%;
         position: relative;
     }
 
