@@ -11,7 +11,7 @@ router.get('/:id/credits', async (req, res) => {
   try {
     let credits = await axios.get(`https://api.themoviedb.org/3/movie/${req.params.id}/credits?api_key=${key}`);
     //console.log('CREDITS RES', credits.data.crew);
-    res.status(200).send(credits.data);
+    res.status(200).json(credits.data);
   } catch (e) {
     res.status(500).send(e);
   }
