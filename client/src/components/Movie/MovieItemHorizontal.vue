@@ -1,6 +1,6 @@
 <template>
     <div class="movie">
-        <div class="movie-h-container elevation-5" :class="{expand: expanded}">
+        <div class="movie-h-container elevation-5" :class="{expand: expanded}" @click="goToDetails">
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -58,6 +58,10 @@
           },
             generatePrise() {
               this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
+            },
+
+            goToDetails() {
+                this.$router.push({ name: 'movie', params: { id: this.movie.uuid }})
             }
         },
         mounted() {

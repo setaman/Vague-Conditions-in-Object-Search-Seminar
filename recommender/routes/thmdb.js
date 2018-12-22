@@ -10,6 +10,7 @@ router.get('/:id/credits', async (req, res) => {
   console.log('THMDB KEY', key);
   try {
     let credits = await axios.get(`https://api.themoviedb.org/3/movie/${req.params.id}/credits?api_key=${key}`);
+    //console.log('CREDITS RES', credits.data.crew);
     res.status(200).send(credits.data);
   } catch (e) {
     res.status(500).send(e);
