@@ -30,7 +30,7 @@
         data:()=>({
            recommended_movies: [],
             is_loading: false,
-            recomm_id: false,
+            recomm_id: null,
         }),
         methods: {
             async recommendItemsToUser() {

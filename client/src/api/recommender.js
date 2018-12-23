@@ -16,7 +16,7 @@ export function getRecommendedItems (user_id, count = 10, scenario = 'homepage',
     });
 }
 
-export function getItemsToItem (item_id, user_id, count = 10, scenario = 'homepage', relevance = 'low', diversity = 0.0){
+export function getItemsToItem (item_id, user_id, count = 10, scenario = 'homepage', relevance = 'low', diversity = 0.5){
     return axios.get('http://localhost:3000/recommendation/itemstoitem', {
         params: {
             item_id,
