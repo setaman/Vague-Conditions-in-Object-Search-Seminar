@@ -1,7 +1,7 @@
 <template>
     <div class="movie">
         <div class="movie-h-container elevation-5" :class="{expand: expanded}">
-            <router-link class="to-details" target="_blank" :to="{ name: 'movie', params: { id: this.movie.uuid}}"></router-link>
+            <router-link class="to-details" target="_blank" :to="{ name: 'movie', params: { id: this.movie.tmdb_id}}"></router-link>
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -50,19 +50,19 @@
         }),
         methods: {
           expandCard() {
-              if (this.$store.getters.expanded_card !== this.movie.uuid) {
+              if (this.$store.getters.expanded_card !== this.movie.tmdb_id) {
                   this.expand = true;
               } else {
                   this.expand = !this.expand;
               }
-              if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.uuid);
+              if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
           },
             generatePrise() {
               this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
             },
 
             goToDetails() {
-                this.$router.push({ name: 'movie', params: { id: this.movie.uuid }})
+                this.$router.push({ name: 'movie', params: { id: this.movie.tmdb_id }})
             }
         },
         mounted() {
@@ -70,7 +70,7 @@
         },
         computed: {
             expanded() {
-                return this.expand && this.$store.getters.expanded_card === this.movie.uuid;
+                return this.expand && this.$store.getters.expanded_card === this.movie.tmdb_id;
             }
         }
     }

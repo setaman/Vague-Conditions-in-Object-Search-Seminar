@@ -19,7 +19,7 @@
 
 <script>
     import {getRecommendedItems} from "@/api/recommender";
-    import {search} from "@/api/movies";
+    import {search, getMovieById} from "@/api/movies";
     import SectionHeader from "@/components/Home/SectionHeader";
     import MovieItemHorizontal from "@/components/Movie/MovieItemHorizontal";
     import MoviesListContainer from "../Movie/MoviesListContainer";
@@ -32,15 +32,14 @@
             is_loading: false,
         }),
         methods: {
-            async similarMovies() {
+            async recommendItemsToUser() {
                 this.is_loading = true;
                 try {
                     let recommended = await getRecommendedItems(this.$store.getters.user.id, 50);
 
-                    let promises = recommended.data.map(movie => search(movie.title));
+                    let promises = recommended.data.map(movie => getMovieById(movie.id));
                     let result = await Promise.all(promises);
 
-                    console.log(result[0].data[0]._fields[0].properties);
                     this.recommended_movies.push(...result.map(res => {
                         if(res.data.length>0) return res.data[0]._fields[0].properties;
                     }));
@@ -53,7 +52,7 @@
             }
         },
         mounted() {
-          this.similarMovies();
+          this.recommendItemsToUser();
         },
         computed: {
             user() {

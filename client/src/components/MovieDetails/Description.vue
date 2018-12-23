@@ -36,7 +36,7 @@
                             {{price}}$
                         </span>
                     <h1 class="movie-title">
-                        {{movie.original_title}}
+                        {{movie.title}}
                     </h1>
 
                     <p class="movie-overview mb-1">{{movie.tagline}}</p>

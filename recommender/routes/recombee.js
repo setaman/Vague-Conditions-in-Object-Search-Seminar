@@ -235,7 +235,7 @@ function sanitizeRecommendedItems(items) {
 }
 
 function isID(prop) {
-    return prop.toLowerCase().indexOf('id') > -1;
+    return prop === 'id' || prop === 'tmdb_id';
 }
 
 module.exports = router;

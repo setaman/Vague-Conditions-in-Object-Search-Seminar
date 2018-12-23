@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let neo4j = require('../lib/neo4j');
 
-router.get('/id/:uuid', (req, res) => {
+router.get('/id/:tmdb', (req, res) => {
   neo4j.getMovieById(req, res);
 });
 
