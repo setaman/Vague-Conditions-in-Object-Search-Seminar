@@ -216,6 +216,24 @@ router.get('/', async (req, res) => {
         res.status(500).send('Something is wrong' + e);
     }
 });
+
+//ITEMS to ITEM
+router.get('/itemstoitem', async (req, res) => {
+    let options = req.query;
+    console.log(options);
+    try {
+        let recommended_items = await client.send(new rqs.RecommendItemsToItem(options.item_id, options.user_id, parseInt(options.count) || 10, {
+            'cascadeCreate': true,
+            'returnProperties': true,
+            'scenario': options.scenario || 'homepage',
+            'minRelevance': options.relevance || 'low',
+            'diversity': options.diversity || 0.0,
+        }));
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
 // //////////////
 //  RECOMMENDATIONS
 // ////////////////////////////////////////////////////////////
