@@ -9,8 +9,7 @@
             </v-flex>
         </v-layout>
         <description v-if="!is_loading" :movie="movie"/>
-        <similar/>
-        <top-picks/>
+        <similar v-if="!is_loading" :id="id"/>
     </v-container>
 </template>
 
