@@ -155,6 +155,15 @@ router.post('/bookmark', async (req, res, next) => {
     }
 });
 
+router.post('/removebookmark', async (req, res, next) => {
+    try {
+        await client.send(new rqs.DeleteBookmark(req.body.user_id, req.body.item_id));
+        res.status(200).send('User ' + req.body.user_id + ' removed bookmark for ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
 router.post('/view', async (req, res, next) => {
     try {
         await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:

@@ -1,7 +1,8 @@
 <template>
     <div class="movie">
         <div class="movie-h-container elevation-5" :class="{expand: expanded}">
-            <router-link class="to-details" target="_blank" :to="{ name: 'movie', params: { id: this.movie.tmdb_id}}"></router-link>
+            <router-link class="to-details" target="_blank"
+                         :to="{ name: 'movie', params: { id: this.movie.tmdb_id}}"></router-link>
             <v-img
                     class="movie-h-poster"
                     height="278"
@@ -15,7 +16,7 @@
                 <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
             </div>
             <div class="bookmark">
-                <v-btn icon flat color="error" @click="favorite = !favorite">
+                <v-btn icon flat color="error" @click="bookmark()">
                     <v-icon color="error">
                         {{favorite ? 'favorite' : 'favorite_border'}}
                     </v-icon>
@@ -38,31 +39,48 @@
 <script>
     import PopularityCircle from "../Base/PopularityCircle";
     import MovieInfo from "./MovieInfo";
+    import {callInteraction} from "../../api/recommender";
 
     export default {
         name: "MovieItemHorizontal",
         components: {MovieInfo, PopularityCircle},
         props: ['movie'],
-        data: ()=>({
+        data: () => ({
             expand: false,
             favorite: false,
             price: 0,
         }),
         methods: {
-          expandCard() {
-              if (this.$store.getters.expanded_card !== this.movie.tmdb_id) {
-                  this.expand = true;
-              } else {
-                  this.expand = !this.expand;
-              }
-              if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
-          },
+            expandCard() {
+                if (this.$store.getters.expanded_card !== this.movie.tmdb_id) {
+                    this.expand = true;
+                } else {
+                    this.expand = !this.expand;
+                }
+                if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
+            },
             generatePrise() {
-              this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
+                this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
             },
 
             goToDetails() {
-                this.$router.push({ name: 'movie', params: { id: this.movie.tmdb_id }})
+                this.$router.push({name: 'movie', params: {id: this.movie.tmdb_id}})
+            },
+
+            bookmark() {
+                if (this.favorite) {
+                    this.removeBookmark();
+                } else {
+                    callInteraction('bookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
+                        .then(res => console.log(res.data))
+                        .catch(e => console.log(e));
+                }
+                this.favorite = !this.favorite;
+            },
+            removeBookmark() {
+                callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
+                    .then(res => console.log(res.data))
+                    .catch(e => console.log(e));
             }
         },
         mounted() {
@@ -84,10 +102,12 @@
         width: 185px;
         position: relative;
         perspective: 1000px;
+
         &:hover {
             z-index: 1;
         }
     }
+
     .movie-h-container {
         transition: 0.3s;
         display: inline-block;
@@ -97,11 +117,13 @@
         animation: movie 1s ease-in-out;
         cursor: pointer;
         position: relative;
+
         &:hover {
             .movie-h-poster {
                 transform: scale(1.1);
             }
         }
+
         &.expand {
             z-index: 5;
             transform: scale(1.1) rotateX(-30deg) translateY(-10px);
@@ -130,12 +152,14 @@
             left: 10px;
             z-index: 2;
         }
+
         .bookmark {
             position: absolute;
             bottom: 0;
             left: 0;
             z-index: 2
         }
+
         .details {
             opacity: 0.5;
             position: absolute;
@@ -164,7 +188,8 @@
         position: static;
         height: 0;
         width: 420px;
-        &.info-expanded{
+
+        &.info-expanded {
             margin: 16px 0 16px 0;
             z-index: 5;
             height: 278px;
