@@ -164,13 +164,26 @@ router.post('/removebookmark', async (req, res, next) => {
     }
 });
 
-router.post('/view', async (req, res, next) => {
+router.post('/detailview', async (req, res, next) => {
     try {
-        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:
+        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, {
             'duration': req.body.duration,
             'cascadeCreate': true,
         }));
         res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.post('/portionview', async (req, res, next) => {
+    try {
+        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, {
+            'portion': 0.5,
+            'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
+        }));
+        res.status(200).send('User ' + req.body.user_id + ' viewed portion from ' + req.body.item_id);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -211,7 +224,6 @@ router.post('/cart', async (req, res, next) => {
 //ITEMS to USER
 router.get('/', async (req, res) => {
     let options = req.query;
-    console.log(options);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
@@ -220,7 +232,7 @@ router.get('/', async (req, res) => {
             'minRelevance': options.relevance || 'low',
             'diversity': options.diversity || 0.0,
         }));
-        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms, recommended_items.recommId));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -229,7 +241,6 @@ router.get('/', async (req, res) => {
 //ITEMS to ITEM
 router.get('/itemstoitem', async (req, res) => {
     let options = req.query;
-    console.log(options);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToItem(options.item_id, options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
@@ -238,7 +249,7 @@ router.get('/itemstoitem', async (req, res) => {
             'minRelevance': options.relevance || 'low',
             'diversity': options.diversity || 0.0,
         }));
-        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms, recommended_items.recommId));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -254,11 +265,8 @@ function sanitizeItems(items, items_ids) {
     });
 }
 
-function sanitizeRecommendedItems(items) {
-    return items.map((item) => {
-        let id = item.id;
-        return {id, ...item.values}
-    });
+function sanitizeRecommendedItems(items, recomm_id) {
+    return items.map((item) => ({recomm_id, id: item.id, ...item.values}));
 }
 
 function isID(prop) {

@@ -49,3 +49,19 @@ module.exports.getMovieById = (req, res) => {
         })
         .finally(() => session.close())
 };
+
+module.exports.bookmark = (req, res) => {
+    console.log(req.params.tmdb);
+    session
+        .run('MATCH (movie:Movie) \
+                WHERE movie.tmdb_id = {id} RETURN movie',
+            {id: parseInt(req.params.tmdb)})
+        .then(result => {
+            res.status(200).type('application/json').send(result.records);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).type('application/json').send({err});
+        })
+        .finally(() => session.close())
+};

@@ -44,7 +44,7 @@
     export default {
         name: "MovieItemHorizontal",
         components: {MovieInfo, PopularityCircle},
-        props: ['movie'],
+        props: ['movie', 'recomm_id'],
         data: () => ({
             expand: false,
             favorite: false,
@@ -57,7 +57,10 @@
                 } else {
                     this.expand = !this.expand;
                 }
-                if (this.expand) this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
+                if (this.expand) {
+                    if (this.recomm_id) {this.portionView();}
+                    this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
+                }
             },
             generatePrise() {
                 this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
@@ -81,7 +84,16 @@
                 callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
                     .then(res => console.log(res.data))
                     .catch(e => console.log(e));
-            }
+            },
+            portionView() {
+                callInteraction('portionview', {
+                    user_id: this.$store.getters.user.id,
+                    item_id: this.movie.tmdb_id,
+                    recomm_id : this.recomm_id || 0,
+                })
+                    .then(res => console.log(res.data))
+                    .catch(e => console.log(e));
+            },
         },
         mounted() {
             this.generatePrise();

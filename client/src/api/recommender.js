@@ -47,10 +47,11 @@ export function signup (credentials){
 /**
  * INTERACTION
  * */
-export function callInteraction(action, {user_id, item_id, rating}) {
+export function callInteraction(action, {user_id, item_id, rating, recomm_id}) {
     return axios.post(`http://localhost:3000/recommendation/${action}`, {
         user_id,
         item_id,
         rating,
+        recomm_id,
     });
 }
