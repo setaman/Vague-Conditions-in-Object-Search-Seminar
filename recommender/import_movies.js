@@ -1,14 +1,31 @@
 const fs = require('fs');
 const axios = require('axios');
 const movies = JSON.parse(fs.readFileSync('./movies/neo4j.json'));
-const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee_100s.json'));
+const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee_100s_2.json'));
 const log = require('./logger');
 
-let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
+/*let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
 
 Promise.all(promises)
     .then(res => console.log('ADDED', res.data))
-    .catch(error => console.error('IMPORT PROMISES', error.response.data));
+    .catch(error => console.error('IMPORT PROMISES', error.response.data));*/
+
+/*let count = 0;
+let m_100s = [];
+let temp = [];
+
+for (let i = 0; i < movies_recombee.length; i++) {
+    if (++count === 100) {
+        m_100s.push(temp);
+        count = 0;
+        temp = [];
+    }
+    temp.push(movies_recombee[i]);
+}
+
+m_100s.push(movies_recombee.slice(3700, 3720));*/
+
+
 
 let properties = [
     {adult: 'boolean'},
@@ -32,9 +49,9 @@ let properties = [
     {release_date: 'string'},
 ];
 
-//let recombee_promises = movies_recombee.map(movie_100s => axios.post('http://localhost:3000/recommendation/items', movie_100s));
+let recombee_promises = movies_recombee.map(movie_100s => axios.post('http://localhost:3000/recommendation/items', movie_100s));
 
-/*axios.post('http://localhost:3000/recommendation/items/properties', properties)
+axios.post('http://localhost:3000/recommendation/items/properties', properties)
     .then(() => {
        log.info('Recommender add properties', 'Properties added!');
         Promise.all(recombee_promises)
@@ -44,7 +61,8 @@ let properties = [
     .catch((error) => {
         log.error('Recommender', 'Some error occurred');
         console.log('Error', error.response.data);
-    });*/
+    });
+
 
 /*
 const getGenres = movie => `${movie.genres.map(genre => genre.name).join(', ')}`;
@@ -59,7 +77,7 @@ const getCollection = movie => movie.belongs_to_collection ? movie.belongs_to_co
 
 let sanitized_movies = movies_recombee.map(movie => {
     let m = {
-        uuid: movie.uuid,
+        tmdb_id: movie.tmdb_id,
         adult: movie.adult,
         budget: movie.budget,
         revenue: movie.revenue,
@@ -87,4 +105,9 @@ let sanitized_movies = movies_recombee.map(movie => {
     return m;
 });
 */
+
+/*fs.writeFile(`./movies/recombee_100s_2.json`, JSON.stringify(m_100s), 'utf8', (err, data) => {
+    if (err) console.log('ERROR while writing', err);
+    else console.log('WRITE successful');
+});*/
 

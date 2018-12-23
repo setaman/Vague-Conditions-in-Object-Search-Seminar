@@ -7,7 +7,7 @@
             >
             <img
                     v-else
-                    src="@/assets/logo.svg"
+                    src="@/assets/tmdb.svg"
             >
         </v-avatar>
         <h4 class="crew-person-name">{{person.name}}</h4>

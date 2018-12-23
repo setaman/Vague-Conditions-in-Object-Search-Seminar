@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
+import MovieDetails from './views/MovieDetails.vue'
 
 //import store from '@/store';
 
@@ -27,6 +28,12 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: Login,
+        },
+        {
+            path: '/movie/:id',
+            name: 'movie',
+            component: MovieDetails,
+            props: true
         },
     ]
 })

@@ -35,10 +35,11 @@ module.exports.searchMovies = (req, res) => {
 };
 
 module.exports.getMovieById = (req, res) => {
+    console.log(req.params.tmdb);
     session
         .run('MATCH (movie:Movie) \
-                WHERE movie.uuid = {id} RETURN movie',
-            {id: req.params.uuid})
+                WHERE movie.tmdb_id = {id} RETURN movie',
+            {id: parseInt(req.params.tmdb)})
         .then(result => {
             res.status(200).type('application/json').send(result.records);
         })

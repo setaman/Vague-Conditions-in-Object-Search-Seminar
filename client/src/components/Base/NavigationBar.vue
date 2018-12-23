@@ -1,8 +1,10 @@
 <template>
-    <v-toolbar dark color="#122133" fixed app>
+    <v-toolbar dark color="#122133" fixed app id="navbar">
         <v-toolbar-side-icon></v-toolbar-side-icon>
 
-        <v-toolbar-title class="white--text">FILMIX</v-toolbar-title>
+        <v-toolbar-title class="white--text">
+            <router-link to="/">FILMIX</router-link>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -31,5 +33,8 @@
 </script>
 
 <style scoped>
+    #navbar{
+        z-index: 100;
+    }
 
 </style>
