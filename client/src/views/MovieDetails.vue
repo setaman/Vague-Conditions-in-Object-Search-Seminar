@@ -3,11 +3,15 @@
 
         <v-progress-linear :indeterminate="true" height="2" v-if="is_loading" class="ma-0"></v-progress-linear>
 
+
         <v-layout row wrap v-if="!is_loading" >
             <v-flex class="backdrop" offset-lg1 offset-xl2 xs12 sm12 md12 lg10 xl8>
                 <backdrop :movie="movie"/>
             </v-flex>
         </v-layout>
+        <v-btn large color="primary" @click="getDuration()">
+            time
+        </v-btn>
         <description v-if="!is_loading" :movie="movie"/>
         <similar v-if="!is_loading" :id="id"/>
     </v-container>
@@ -19,10 +23,19 @@
     import Description from "../components/MovieDetails/Description";
     import Similar from "../components/MovieDetails/Similar";
     import TopPicks from "../components/Home/TopPicks";
+    import BtnPrim from "../components/Base/BtnPrim";
+
+    import {callInteraction} from "../api/recommender";
+
+    const Stopwatch = require('timer-stopwatch');
+
+    const timer = new Stopwatch({refreshRateMS:1000});
+
+    timer.start();
 
     export default {
         name: "MovieDetails",
-        components: {TopPicks, Similar, Description, Backdrop},
+        components: {BtnPrim, TopPicks, Similar, Description, Backdrop},
         props: ['id'],
         data: () => ({
             movie: null,
@@ -44,11 +57,27 @@
                     this.is_loading = false;
                 }
             },
+            getDuration(){
+                console.log(((timer.ms / 1000).toFixed(0)));
+                return (timer.ms / 1000).toFixed(0);
+            },
+            detailView() {
+                callInteraction('detailview' ,{
+                    user_id : this.$store.getters.user.id,
+                    item_id : this.id,
+                    recomm_id : this.recomm_id,
+                    duration : this.getDuration(),
+                })
+                    .then(res => console.log(res.data))
+                    .catch(err => console.log(err.data));
+            }
         },
         mounted() {
             this.requestMovie();
         },
-        beforeDestroy() {},
+        beforeDestroy() {
+            this.detailView()
+        },
         computed: {}
     }
 </script>

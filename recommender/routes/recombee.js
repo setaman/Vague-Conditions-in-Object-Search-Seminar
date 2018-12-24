@@ -167,10 +167,11 @@ router.post('/removebookmark', async (req, res, next) => {
 router.post('/detailview', async (req, res, next) => {
     try {
         await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, {
-            'duration': req.body.duration,
+            'duration': req.body.duration || 1,
             'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
         }));
-        res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id);
+        res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id + ' for ' + req.body.duration + ' sec.');
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }

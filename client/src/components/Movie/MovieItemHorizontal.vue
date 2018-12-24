@@ -74,7 +74,11 @@
                 if (this.favorite) {
                     this.removeBookmark();
                 } else {
-                    callInteraction('bookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
+                    callInteraction('bookmark', {
+                        user_id: this.$store.getters.user.id,
+                        item_id: this.movie.tmdb_id,
+                        recomm_id: this.recomm_id
+                    })
                         .then(res => console.log(res.data))
                         .catch(e => console.log(e));
                 }
