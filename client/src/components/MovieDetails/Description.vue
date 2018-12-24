@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="bookmark">
-                            <v-btn icon large flat color="error" @click="favorite = !favorite">
+                            <v-btn icon large flat color="error" @click="bookmark()">
                                 <v-icon medium color="error">
                                     {{favorite ? 'favorite' : 'favorite_border'}}
                                 </v-icon>
@@ -93,6 +93,7 @@
 
 <script>
     import {getCredits} from "@/api/movies";
+    import {callInteraction} from "../../api/recommender";
     import GenreTag from "@/components/Movie/GenreTag";
     import CrewPerson from "@/components/Movie/CrewPerson";
     import PopularityCircle from "../Base/PopularityCircle";
@@ -100,7 +101,7 @@
     export default {
         name: "Description",
         components: {PopularityCircle, CrewPerson, GenreTag},
-        props: ['movie'],
+        props: ['movie', 'recomm_id'],
         data:()=>({
             is_loading: true,
             directors: [],
@@ -125,6 +126,25 @@
             },
             generatePrise() {
                 this.price = (Math.random() * (20 - 1) + 1).toFixed(2);
+            },
+            bookmark() {
+                if (this.favorite) {
+                    this.removeBookmark();
+                } else {
+                    callInteraction('bookmark', {
+                        user_id: this.$store.getters.user.id,
+                        item_id: this.movie.tmdb_id,
+                        recomm_id: this.recomm_id
+                    })
+                        .then(res => console.log(res.data))
+                        .catch(e => console.log(e));
+                }
+                this.favorite = !this.favorite;
+            },
+            removeBookmark() {
+                callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
+                    .then(res => console.log(res.data))
+                    .catch(e => console.log(e));
             },
         },
         mounted() {

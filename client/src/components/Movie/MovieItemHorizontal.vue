@@ -2,7 +2,7 @@
     <div class="movie">
         <div class="movie-h-container elevation-5" :class="{expand: expanded}">
             <router-link class="to-details" target="_blank"
-                         :to="{ name: 'movie', params: { id: this.movie.tmdb_id}}"></router-link>
+                         :to="{ name: 'movie', params: { id: this.movie.tmdb_id, recomm_id}}"></router-link>
             <v-img
                     class="movie-h-poster"
                     height="278"

@@ -12,7 +12,7 @@
         <v-btn large color="primary" @click="getDuration()">
             time
         </v-btn>
-        <description v-if="!is_loading" :movie="movie"/>
+        <description v-if="!is_loading" :movie="movie" :recomm_id="recomm_id"/>
         <similar v-if="!is_loading" :id="id"/>
     </v-container>
 </template>
@@ -36,7 +36,7 @@
     export default {
         name: "MovieDetails",
         components: {BtnPrim, TopPicks, Similar, Description, Backdrop},
-        props: ['id'],
+        props: ['id', 'recomm_id'],
         data: () => ({
             movie: null,
             is_loading: true,
