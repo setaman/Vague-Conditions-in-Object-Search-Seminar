@@ -14,4 +14,16 @@ router.post('/', (req, res) =>{
   neo4j.addMovie(req, res);
 });
 
+router.post('/bookmark', (req, res) =>{
+  neo4j.addBookmarkRelation(req, res);
+});
+
+router.get('/bookmark', (req, res) =>{
+  neo4j.getBookmarkRelation(req, res);
+});
+
+router.delete('/bookmark', (req, res) =>{
+  neo4j.addMovie(req, res);
+});
+
 module.exports = router;
