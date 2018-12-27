@@ -47,6 +47,8 @@
                         if(res.data.length>0) return {...res.data[0]._fields[0].properties, recomm_id: recommended.data[0].recomm_id};
                     }));
 
+                    console.log(this.recommended_movies);
+
                 } catch (e) {
                     console.log(e);
                 } finally {

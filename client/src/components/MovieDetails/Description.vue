@@ -27,7 +27,6 @@
 
                     <div class="text-xs-center mt-2">
                         <v-rating color="yellow" medium v-model="rating" @input="rate()"></v-rating>
-                        {{rating}}
                     </div>
 
                 </v-flex>
