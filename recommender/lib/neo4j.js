@@ -80,3 +80,18 @@ module.exports.getBookmarkRelation = (req, res) => {
         })
         .finally(() => session.close())
 };
+
+module.exports.deleteBookmarkRelation = (req, res) => {
+    console.log(req.query.user_id);
+    session
+        .run('MATCH (u:User {id: {user_id}})-[r:BOOKMARK]->(m:Movie {tmdb_id: {movie_id}}) DELETE r;',
+            {movie_id: parseInt(req.query.movie_id), user_id: req.query.user_id})
+        .then(result => {
+            res.status(200).type('application/json').send(result);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).type('application/json').send({err});
+        })
+        .finally(() => session.close())
+};

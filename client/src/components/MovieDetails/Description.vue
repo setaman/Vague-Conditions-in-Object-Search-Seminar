@@ -26,7 +26,8 @@
                     </div>
 
                     <div class="text-xs-center mt-2">
-                        <v-rating clearable color="yellow" medium v-model="rating"></v-rating>
+                        <v-rating color="yellow" medium v-model="rating" @input="rate()"></v-rating>
+                        {{rating}}
                     </div>
 
                 </v-flex>
@@ -145,6 +146,16 @@
                 callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
                     .then(res => console.log(res.data))
                     .catch(e => console.log(e));
+            },
+            rate() {
+                callInteraction('rating',{
+                    user_id: this.$store.getters.user.id,
+                    item_id: this.movie.tmdb_id,
+                    rating: this.rating,
+                    recomm_id : this.recomm_id,
+                })
+                    .then(res => console.log(res.data))
+                    .catch(err => console.error(err.data));
             },
         },
         mounted() {

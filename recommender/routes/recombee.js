@@ -192,12 +192,13 @@ router.post('/portionview', async (req, res, next) => {
 
 router.post('/rating', async (req, res, next) => {
     let rating = (Number.parseFloat((parseInt(req.body.rating) - 3) / 2).toFixed(2));
-    log.info('rating', rating);
+    log.info('rating', req.body);
     try {
         await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, rating, {
-            'cascadeCreate': true
+            'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
         }));
-        res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id);
+        res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id + ' with ' + rating + ' Star(s)');
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }

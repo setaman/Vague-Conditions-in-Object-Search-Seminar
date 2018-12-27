@@ -23,7 +23,7 @@ router.get('/bookmark', (req, res) =>{
 });
 
 router.delete('/bookmark', (req, res) =>{
-  neo4j.addMovie(req, res);
+  neo4j.deleteBookmarkRelation(req, res);
 });
 
 module.exports = router;
