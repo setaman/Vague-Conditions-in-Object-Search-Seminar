@@ -138,6 +138,9 @@ router.post('/purchase', async (req, res, next) => {
         await client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
             'cascadeCreate': true,
             'amount': req.body.amount,
+            'recommId': req.body.recomm_id,
+            'price': req.body.recomm_id,
+            'profit': req.body.recomm_id,
         }));
         res.status(200).send('User ' + req.body.user_id + ' purchased ' + req.body.item_id);
     } catch (e) {

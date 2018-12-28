@@ -61,7 +61,7 @@
                     this.expand = !this.expand;
                 }
                 if (this.expand) {
-                    if (this.recomm_id) {this.portionView();}
+                    this.portionView();
                     this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
                 }
             },
@@ -96,7 +96,7 @@
                 callInteraction('portionview', {
                     user_id: this.$store.getters.user.id,
                     item_id: this.movie.tmdb_id,
-                    recomm_id : this.recomm_id || 0,
+                    recomm_id : this.recomm_id,
                 })
                     .then(res => console.log(res.data))
                     .catch(e => console.log(e));

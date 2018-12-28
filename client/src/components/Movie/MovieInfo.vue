@@ -26,17 +26,54 @@
                 <v-flex xs12 class="movie-controls mt-3">
                     <v-layout>
                         <v-flex xs6 pa-1>
-                            <v-btn target="_blank" :to="{ name: 'movie', params: { id: movie.tmdb_id}, query:{recomm_id}}" round outline color="primary" block>
+                            <v-btn target="_blank"
+                                   :to="{ name: 'movie', params: { id: movie.tmdb_id}, query:{ recomm_id: movie.recomm_id}}"
+                                   round outline color="primary" block>
                                 more details
                             </v-btn>
                         </v-flex>
                         <v-flex xs6 pa-1>
-                            <v-btn round color="primary" block>
+                            <v-btn round color="primary" block @click="purchase">
                                 by for {{price}}$
                             </v-btn>
                         </v-flex>
                     </v-layout>
                 </v-flex>
+
+                <v-dialog
+                        v-model="purchase_successful"
+                        width="500"
+                >
+
+                    <v-card>
+                        <v-card-title
+                                class="headline green accent-2"
+                                primary-title
+                        >
+                            Thank you
+                        </v-card-title>
+
+                        <v-card-text>
+                            <h2>
+                                {{purchase_response}}
+                            </h2>
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                    color="primary"
+                                    flat
+                                    @click="purchase_successful = false"
+                            >
+                                OK
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
             </div>
         </transition>
         {{wasExpanded}}
@@ -47,6 +84,7 @@
     import {getCredits} from "@/api/movies";
     import CrewPerson from "./CrewPerson";
     import GenreTag from "./GenreTag";
+    import {callInteraction} from "@/api/recommender";
 
     export default {
         name: "MovieInfo",
@@ -55,6 +93,8 @@
             directors: [],
             cast: [],
             is_loading: false,
+            purchase_successful: false,
+            purchase_response: '',
         }),
         props: ['movie', 'expanded', 'price'],
         methods: {
@@ -71,6 +111,21 @@
                 } finally {
                     this.is_loading = false;
                 }
+            },
+            purchase() {
+                callInteraction('purchase', {
+                    user_id: this.$store.getters.user.id,
+                    item_id: this.movie.tmdb_id,
+                    recomm_id: this.movie.recomm_id,
+                    price: this.price,
+                    profit: this.price,
+                })
+                    .then(res => {
+                        this.purchase_successful = true;
+                        this.purchase_response = res.data;
+                        console.log(res.data)
+                    })
+                    .catch(e => console.error(e.data));
             }
         },
         mounted() {

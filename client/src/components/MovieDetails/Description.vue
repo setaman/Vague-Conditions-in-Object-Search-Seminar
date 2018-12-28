@@ -77,7 +77,7 @@
 
                     <v-layout row wrap>
                         <v-flex xs6 mt-3>
-                            <v-btn round color="primary" block>
+                            <v-btn round color="primary" block @click="purchase">
                                 by for {{price}}$
                             </v-btn>
                         </v-flex>
@@ -88,6 +88,41 @@
             </v-layout>
 
         </v-flex>
+
+        <v-dialog
+                v-model="purchase_successful"
+                width="500"
+        >
+
+            <v-card>
+                <v-card-title
+                        class="headline green accent-2"
+                        primary-title
+                >
+                    Thank you
+                </v-card-title>
+
+                <v-card-text>
+                    <h2>
+                        {{purchase_response}}
+                    </h2>
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="primary"
+                            flat
+                            @click="purchase_successful = false"
+                    >
+                        OK
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-layout>
 </template>
 
@@ -109,6 +144,8 @@
             price: 0,
             rating: null,
             favorite: false,
+            purchase_successful: false,
+            purchase_response: '',
         }),
         methods: {
             async getCast() {
@@ -156,6 +193,21 @@
                     .then(res => console.log(res.data))
                     .catch(err => console.error(err.data));
             },
+            purchase() {
+                callInteraction('purchase', {
+                    user_id: this.$store.getters.user.id,
+                    item_id: this.movie.tmdb_id,
+                    recomm_id: this.movie.recomm_id,
+                    price: this.price,
+                    profit: this.price,
+                })
+                    .then(res => {
+                        this.purchase_successful = true;
+                        this.purchase_response = res.data;
+                        console.log(res.data)
+                    })
+                    .catch(e => console.error(e.data));
+            }
         },
         mounted() {
             this.generatePrise();
