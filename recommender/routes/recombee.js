@@ -101,22 +101,9 @@ router.post('/users/properties', async (req, res, next) => {
 
 router.post('/users', async (req, res, next) => {
     let requests = req.body.map((user) => {
+        let id = user._id;
 
-        let generated_user_values = {};
-        let generated_user_id = '';
-
-        for (const prop in user) {
-            if (isID(prop)) {
-                generated_user_id = user[prop];
-            } else {
-                generated_user_values[prop] = user[prop];
-            }
-        }
-
-        console.log(generated_user_id);
-        console.log(generated_user_values);
-
-        return new rqs.SetUserValues(generated_user_id, generated_user_values, {'cascadeCreate': true});
+        return new rqs.SetUserValues(id, {name: user.name}, {'cascadeCreate': true});
     });
     try {
         await client.send(new rqs.Batch(requests));
@@ -182,8 +169,7 @@ router.post('/detailview', async (req, res, next) => {
 
 router.post('/portionview', async (req, res, next) => {
     try {
-        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, {
-            'portion': 0.5,
+        await client.send(new rqs.SetViewPortion(req.body.user_id, req.body.item_id, 0.5, {
             'cascadeCreate': true,
             'recommId': req.body.recomm_id,
         }));
@@ -275,7 +261,7 @@ function sanitizeRecommendedItems(items, recomm_id) {
 }
 
 function isID(prop) {
-    return prop === 'id' || prop === 'tmdb_id';
+    return prop === 'id' || prop === '_id' || prop === 'tmdb_id';
 }
 
 module.exports = router;

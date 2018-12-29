@@ -9,9 +9,6 @@
                 <backdrop :movie="movie"/>
             </v-flex>
         </v-layout>
-        <v-btn large color="primary" @click="getDuration()">
-            time
-        </v-btn>
         <description v-if="!is_loading" :movie="movie" :recomm_id="recomm_id"/>
         <similar v-if="!is_loading" :id="id"/>
     </v-container>
