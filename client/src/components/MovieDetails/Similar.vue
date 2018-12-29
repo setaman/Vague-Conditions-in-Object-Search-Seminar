@@ -2,6 +2,7 @@
     <v-layout row wrap class="similar-movies">
         <v-flex xs12 mt-4>
             <section-header header="Maybe also interesting for you"/>
+            {{relevance}}
             <v-progress-linear
                     v-if="is_loading"
                     height="2"
@@ -33,22 +34,30 @@
             recomm_id: null,
         }),
         methods: {
-            async similarMovies() {
+            async similarMovies(relevance = 'medium') {
                 this.is_loading = true;
                 try {
-                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48, 'homepage', 'medium', 0.3);
+                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48, 'homepage', relevance, 0.3);
+
+                    if (!recommended.data.length > 0) {
+                        this.recommended_movies = [];
+                        console.log('no RECOMMS !!!!');
+                        return;
+                    }
 
                     let promises = recommended.data.map(movie => getMovieById(movie.id));
                     let result = await Promise.all(promises);
 
                     this.recomm_id = recommended.data[0].recomm_id;
 
+                    this.recommended_movies = [];
+
                     this.recommended_movies.push(...result.map(res => {
                         if(res.data.length>0) return {...res.data[0]._fields[0].properties, recomm_id: recommended.data[0].recomm_id};
                     }));
 
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }
@@ -61,6 +70,10 @@
         computed: {
             recommended() {
                 return this.recommended_movies;
+            },
+            relevance() {
+                this.similarMovies(this.$store.getters.relevance);
+                return '';
             }
         }
     }

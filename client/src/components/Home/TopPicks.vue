@@ -59,7 +59,7 @@
                     //console.log(this.recommended_movies);
 
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }

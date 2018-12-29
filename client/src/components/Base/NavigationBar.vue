@@ -25,6 +25,22 @@
 
         <v-spacer></v-spacer>
 
+        <v-spacer></v-spacer>
+
+        <span class="mr-2">Diversity:</span>
+            <v-slider
+                    ml-2
+                    v-model="diversity"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    hide-details
+                    :min="0.0"
+                    :max="1.0"
+                    :step="0.1"
+            ></v-slider>
+
+        <v-spacer></v-spacer>
+
 
         <v-btn to="/login" icon flat color="info" @click="logout">
             <v-icon color="primary">person</v-icon>
@@ -46,6 +62,16 @@
             setRelevance(relevance = 'medium') {
                 this.$store.dispatch('setRelevance', relevance);
             }
+        },
+        computed: {
+            diversity: {
+                get () {
+                    return this.$store.getters.diversity;
+                },
+                set (val) {
+                    this.$store.dispatch('setDiversity', val)
+                }
+            }
         }
     }
 </script>
@@ -61,6 +87,14 @@
             &:hover {
                 color: #00B7FF;
             }
+        }
+    }
+
+    /deep/ .v-slider__thumb-label {
+        transform: translateY(100%) translateY(20px) translateX(-50%) rotate(225deg) !important;
+
+        span {
+            transform: rotate(135deg) !important;
         }
     }
 

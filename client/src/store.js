@@ -15,6 +15,7 @@ export default new Vuex.Store({
         movies: [],
         expanded_card: '',
         relevance: 'medium',
+        diversity: 0.5,
     },
     getters: {
         isLoggedIn: () => !!localStorage.getItem("jwtToken"),
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         movies: (state) => state.movies,
         expanded_card: (state) => state.expanded_card,
         relevance: (state) => state.relevance,
+        diversity: (state) => state.diversity,
     },
 
     mutations: {
@@ -30,6 +32,7 @@ export default new Vuex.Store({
         setMovies: (state, movies) => state.movies = movies,
         setExpandedCard: (state, index) => state.expanded_card = index,
         setRelevance: (state, relevance) => state.relevance = relevance,
+        setDiversity: (state, diversity) => state.diversity = diversity,
     },
     actions: {
         login({commit}, credentials) {
@@ -69,6 +72,9 @@ export default new Vuex.Store({
         },
         setRelevance({commit}, relevance) {
             commit('setRelevance', relevance);
+        },
+        setDiversity({commit}, diversity) {
+            commit('setDiversity', diversity);
         },
         setExpandedCard({commit}, index) {
             commit('setExpandedCard', index);

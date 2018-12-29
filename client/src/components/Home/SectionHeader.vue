@@ -27,5 +27,7 @@
         color: white;
         text-transform: uppercase;
         padding: 16px;
+        position: relative;
+        z-index: 2;
     }
 </style>
