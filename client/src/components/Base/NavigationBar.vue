@@ -12,6 +12,20 @@
 
         <v-spacer></v-spacer>
 
+        Relevance:
+        <v-btn flat small color="info" @click="setRelevance('high')">
+            high
+        </v-btn>
+        <v-btn small flat color="info" @click="setRelevance()">
+            medium
+        </v-btn>
+        <v-btn small flat color="info" @click="setRelevance('low')">
+            low
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+
         <v-btn to="/login" icon flat color="info" @click="logout">
             <v-icon color="primary">person</v-icon>
         </v-btn>
@@ -28,6 +42,9 @@
             },
             toHome() {
                 this.$router.push({name: 'home'})
+            },
+            setRelevance(relevance = 'medium') {
+                this.$store.dispatch('setRelevance', relevance);
             }
         }
     }

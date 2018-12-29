@@ -7,6 +7,7 @@
                     height="2"
                     :indeterminate="true"
             ></v-progress-linear>
+            {{relevance}}
         </v-flex>
         <v-flex xs12>
             <movies-list-container>
@@ -33,21 +34,29 @@
             recomm_id: null,
         }),
         methods: {
-            async recommendItemsToUser() {
+            async recommendItemsToUser(relevance = 'medium') {
                 this.is_loading = true;
                 try {
-                    let recommended = await getRecommendedItems(this.$store.getters.user.id, 50);
+                    let recommended = await getRecommendedItems(this.$store.getters.user.id, 50, 'homepage', relevance);
+
+                    if (!recommended.data.length > 0) {
+                        this.recommended_movies = [];
+                        console.log('no RECOMMS !!!!');
+                        return;
+                    }
 
                     let promises = recommended.data.map(movie => getMovieById(movie.id));
                     let result = await Promise.all(promises);
 
                     this.recomm_id = recommended.data[0].recomm_id;
 
+                    this.recommended_movies = [];
+
                     this.recommended_movies.push(...result.map(res => {
                         if(res.data.length>0) return {...res.data[0]._fields[0].properties, recomm_id: recommended.data[0].recomm_id};
                     }));
 
-                    console.log(this.recommended_movies);
+                    //console.log(this.recommended_movies);
 
                 } catch (e) {
                     console.log(e);
@@ -66,6 +75,10 @@
             },
             recommended() {
                 return this.recommended_movies;
+            },
+            relevance() {
+                this.recommendItemsToUser(this.$store.getters.relevance);
+                return this.$store.getters.relevance;
             }
         }
     }

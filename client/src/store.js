@@ -14,12 +14,14 @@ export default new Vuex.Store({
         },
         movies: [],
         expanded_card: '',
+        relevance: 'medium',
     },
     getters: {
         isLoggedIn: () => !!localStorage.getItem("jwtToken"),
         user: (state) => state.user,
         movies: (state) => state.movies,
         expanded_card: (state) => state.expanded_card,
+        relevance: (state) => state.relevance,
     },
 
     mutations: {
@@ -27,6 +29,7 @@ export default new Vuex.Store({
         logout: (state) => state.user = {},
         setMovies: (state, movies) => state.movies = movies,
         setExpandedCard: (state, index) => state.expanded_card = index,
+        setRelevance: (state, relevance) => state.relevance = relevance,
     },
     actions: {
         login({commit}, credentials) {
@@ -63,6 +66,9 @@ export default new Vuex.Store({
 
         setMovies({commit}, movies) {
             commit('setMovies', movies);
+        },
+        setRelevance({commit}, relevance) {
+            commit('setRelevance', relevance);
         },
         setExpandedCard({commit}, index) {
             commit('setExpandedCard', index);
