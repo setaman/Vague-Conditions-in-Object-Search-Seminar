@@ -33,7 +33,7 @@
                             </v-btn>
                         </v-flex>
                         <v-flex xs6 pa-1>
-                            <v-btn round color="primary" block @click="purchase">
+                            <v-btn round color="primary" :disabled="purchased" block @click="purchase">
                                 by for {{price}}$
                             </v-btn>
                         </v-flex>
@@ -95,6 +95,7 @@
             is_loading: false,
             purchase_successful: false,
             purchase_response: '',
+            purchased: false,
         }),
         props: ['movie', 'expanded', 'price'],
         methods: {
@@ -122,6 +123,7 @@
                 })
                     .then(res => {
                         this.purchase_successful = true;
+                        this.purchased = true;
                         this.purchase_response = res.data;
                         console.log(res.data)
                     })
