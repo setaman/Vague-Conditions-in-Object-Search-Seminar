@@ -12,16 +12,19 @@
 
         <v-spacer></v-spacer>
 
-        Relevance:
-        <v-btn flat small color="info" @click="setRelevance('high')">
-            high
-        </v-btn>
-        <v-btn small flat color="info" @click="setRelevance()">
-            medium
-        </v-btn>
-        <v-btn small flat color="info" @click="setRelevance('low')">
-            low
-        </v-btn>
+        <span class="mr-3">Relevance:</span>
+
+        <v-btn-toggle color="info" v-model="relevance">
+            <v-btn flat color="primary" value="high">
+                high
+            </v-btn>
+            <v-btn color="primary" flat value="medium">
+                medium
+            </v-btn>
+            <v-btn color="primary" flat value="low">
+                low
+            </v-btn>
+        </v-btn-toggle>
 
         <v-spacer></v-spacer>
 
@@ -71,6 +74,14 @@
                 set (val) {
                     this.$store.dispatch('setDiversity', val)
                 }
+            },
+            relevance: {
+                get () {
+                    return this.$store.getters.relevance;
+                },
+                set (val) {
+                    this.$store.dispatch('setRelevance', val)
+                }
             }
         }
     }
@@ -96,6 +107,10 @@
         span {
             transform: rotate(135deg) !important;
         }
+    }
+
+    .theme--dark.v-btn-toggle {
+        background-color: transparent;
     }
 
 </style>

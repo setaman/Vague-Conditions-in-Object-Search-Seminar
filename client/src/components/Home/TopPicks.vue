@@ -2,12 +2,12 @@
     <v-layout row wrap class="toppicks-container">
         <v-flex xs12 mt-4>
             <section-header :header="'Top picks for you ' + user"/>
+            {{recommendationProperties}}
             <v-progress-linear
                     v-if="is_loading"
                     height="2"
                     :indeterminate="true"
             ></v-progress-linear>
-            {{relevance}}
         </v-flex>
         <v-flex xs12>
             <movies-list-container>
@@ -34,10 +34,10 @@
             recomm_id: null,
         }),
         methods: {
-            async recommendItemsToUser(relevance = 'medium') {
+            async recommendItemsToUser() {
                 this.is_loading = true;
                 try {
-                    let recommended = await getRecommendedItems(this.$store.getters.user.id, 50, 'homepage', relevance);
+                    let recommended = await getRecommendedItems(this.$store.getters.user.id, 50, 'homepage', this.relevance, this.diversity);
 
                     if (!recommended.data.length > 0) {
                         this.recommended_movies = [];
@@ -76,9 +76,17 @@
             recommended() {
                 return this.recommended_movies;
             },
+            recommendationProperties() {
+                console.log(this.$store.getters.relevance);
+                console.log(this.$store.getters.diversity);
+                this.recommendItemsToUser();
+                return '';
+            },
             relevance() {
-                this.recommendItemsToUser(this.$store.getters.relevance);
                 return this.$store.getters.relevance;
+            },
+            diversity() {
+                return this.$store.getters.diversity;
             }
         }
     }

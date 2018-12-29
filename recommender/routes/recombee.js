@@ -121,13 +121,14 @@ router.post('/users', async (req, res, next) => {
 //  INTERACTIONS
 // /////////////
 router.post('/purchase', async (req, res, next) => {
+    console.log(req.body);
     try {
         await client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
             'cascadeCreate': true,
             'amount': req.body.amount,
             'recommId': req.body.recomm_id,
-            'price': req.body.recomm_id,
-            'profit': req.body.recomm_id,
+            'price': parseFloat(req.body.price),
+            'profit': parseFloat(req.body.price),
         }));
         res.status(200).send('User ' + req.body.user_id + ' purchased ' + req.body.item_id);
     } catch (e) {

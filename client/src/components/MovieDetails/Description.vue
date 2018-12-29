@@ -77,7 +77,7 @@
 
                     <v-layout row wrap>
                         <v-flex xs6 mt-3>
-                            <v-btn round color="primary" block @click="purchase">
+                            <v-btn round :disabled="purchased" :color="purchased ? 'success' : 'primary'" block @click="purchase">
                                 by for {{price}}$
                             </v-btn>
                         </v-flex>
@@ -145,6 +145,7 @@
             rating: null,
             favorite: false,
             purchase_successful: false,
+            purchased: false,
             purchase_response: '',
         }),
         methods: {
@@ -197,12 +198,13 @@
                 callInteraction('purchase', {
                     user_id: this.$store.getters.user.id,
                     item_id: this.movie.tmdb_id,
-                    recomm_id: this.movie.recomm_id,
+                    recomm_id: this.recomm_id,
                     price: this.price,
                     profit: this.price,
                 })
                     .then(res => {
                         this.purchase_successful = true;
+                        this.purchased = true;
                         this.purchase_response = res.data;
                         console.log(res.data)
                     })
