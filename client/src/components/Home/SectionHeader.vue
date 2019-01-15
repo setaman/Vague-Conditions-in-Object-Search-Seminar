@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12>
-        <h1 class="movie-section-header">{{header}}</h1>
+        <h1 class="movie-section-header">{{header}} <span class="highlight">{{highlight}}</span></h1>
     </v-flex>
 </template>
 
@@ -12,6 +12,10 @@
         }),
         props: {
             header: {
+                type: String,
+                required : true
+            },
+            highlight: {
                 type: String,
                 required : true
             }
@@ -29,5 +33,8 @@
         padding: 16px;
         position: relative;
         z-index: 2;
+        .highlight {
+            color: #98c8ff;
+        }
     }
 </style>

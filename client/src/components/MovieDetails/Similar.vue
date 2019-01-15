@@ -2,7 +2,7 @@
     <v-layout row wrap class="similar-movies">
         <v-flex xs12 mt-4>
             <section-header header="Maybe also interesting for you"/>
-            {{relevance}}
+            {{recommendationProperties}}
             <v-progress-linear
                     v-if="is_loading"
                     height="2"
@@ -34,10 +34,10 @@
             recomm_id: null,
         }),
         methods: {
-            async similarMovies(relevance = 'medium') {
+            async similarMovies() {
                 this.is_loading = true;
                 try {
-                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48, 'homepage', relevance, 0.3);
+                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48, 'homepage', this.relevance, this.diversity);
 
                     if (!recommended.data.length > 0) {
                         this.recommended_movies = [];
@@ -71,9 +71,15 @@
             recommended() {
                 return this.recommended_movies;
             },
-            relevance() {
-                this.similarMovies(this.$store.getters.relevance);
+            recommendationProperties() {
+                this.similarMovies();
                 return '';
+            },
+            diversity() {
+                return this.$store.getters.diversity;
+            },
+            relevance() {
+                return this.$store.getters.relevance;
             }
         }
     }
