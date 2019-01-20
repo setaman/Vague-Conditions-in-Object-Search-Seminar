@@ -2,6 +2,7 @@
     <v-layout row wrap class="similar-movies">
         <v-flex xs12 mt-4>
             <section-header header="Maybe also interesting for you"/>
+            {{recommendationProperties}}
             <v-progress-linear
                     v-if="is_loading"
                     height="2"
@@ -10,7 +11,7 @@
         </v-flex>
         <v-flex xs12>
             <movies-list-container>
-               <movie-item-horizontal v-for="(movie, i) in recommended" :key="i" :movie="movie"/>
+               <movie-item-horizontal v-for="(movie, i) in recommended" :key="i" :movie="movie" :recomm_id="recomm_id"/>
             </movies-list-container>
         </v-flex>
     </v-layout>
@@ -30,22 +31,33 @@
         data:()=>({
             recommended_movies: [],
             is_loading: false,
+            recomm_id: null,
         }),
         methods: {
             async similarMovies() {
                 this.is_loading = true;
                 try {
-                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48);
+                    let recommended = await getItemsToItem(this.id, this.$store.getters.user.id, 48, 'homepage', this.relevance, this.diversity);
+
+                    if (!recommended.data.length > 0) {
+                        this.recommended_movies = [];
+                        console.log('no RECOMMS !!!!');
+                        return;
+                    }
 
                     let promises = recommended.data.map(movie => getMovieById(movie.id));
                     let result = await Promise.all(promises);
 
-                    console.log(result[0].data[0]._fields[0].properties);
+                    this.recomm_id = recommended.data[0].recomm_id;
+
+                    this.recommended_movies = [];
+
                     this.recommended_movies.push(...result.map(res => {
-                        if(res.data.length>0) return res.data[0]._fields[0].properties;
+                        if(res.data.length>0) return {...res.data[0]._fields[0].properties, recomm_id: recommended.data[0].recomm_id};
                     }));
+
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }
@@ -58,6 +70,16 @@
         computed: {
             recommended() {
                 return this.recommended_movies;
+            },
+            recommendationProperties() {
+                this.similarMovies();
+                return '';
+            },
+            diversity() {
+                return this.$store.getters.diversity;
+            },
+            relevance() {
+                return this.$store.getters.relevance;
             }
         }
     }

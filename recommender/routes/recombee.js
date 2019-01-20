@@ -101,22 +101,9 @@ router.post('/users/properties', async (req, res, next) => {
 
 router.post('/users', async (req, res, next) => {
     let requests = req.body.map((user) => {
+        let id = user._id;
 
-        let generated_user_values = {};
-        let generated_user_id = '';
-
-        for (const prop in user) {
-            if (isID(prop)) {
-                generated_user_id = user[prop];
-            } else {
-                generated_user_values[prop] = user[prop];
-            }
-        }
-
-        console.log(generated_user_id);
-        console.log(generated_user_values);
-
-        return new rqs.SetUserValues(generated_user_id, generated_user_values, {'cascadeCreate': true});
+        return new rqs.SetUserValues(id, {name: user.name}, {'cascadeCreate': true});
     });
     try {
         await client.send(new rqs.Batch(requests));
@@ -134,10 +121,14 @@ router.post('/users', async (req, res, next) => {
 //  INTERACTIONS
 // /////////////
 router.post('/purchase', async (req, res, next) => {
+    console.log(req.body);
     try {
         await client.send(new rqs.AddPurchase(req.body.user_id, req.body.item_id, {
             'cascadeCreate': true,
             'amount': req.body.amount,
+            'recommId': req.body.recomm_id,
+            'price': parseFloat(req.body.price),
+            'profit': parseFloat(req.body.price),
         }));
         res.status(200).send('User ' + req.body.user_id + ' purchased ' + req.body.item_id);
     } catch (e) {
@@ -155,13 +146,35 @@ router.post('/bookmark', async (req, res, next) => {
     }
 });
 
-router.post('/view', async (req, res, next) => {
+router.post('/removebookmark', async (req, res, next) => {
     try {
-        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, { //optional parameters:
-            'duration': req.body.duration,
+        await client.send(new rqs.DeleteBookmark(req.body.user_id, req.body.item_id));
+        res.status(200).send('User ' + req.body.user_id + ' removed bookmark for ' + req.body.item_id);
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.post('/detailview', async (req, res, next) => {
+    try {
+        await client.send(new rqs.AddDetailView(req.body.user_id, req.body.item_id, {
+            'duration': req.body.duration || 1,
             'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
         }));
-        res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id);
+        res.status(200).send('User ' + req.body.user_id + ' viewed ' + req.body.item_id + ' for ' + req.body.duration + ' sec.');
+    } catch (e) {
+        res.status(500).send('Something is wrong' + e);
+    }
+});
+
+router.post('/portionview', async (req, res, next) => {
+    try {
+        await client.send(new rqs.SetViewPortion(req.body.user_id, req.body.item_id, 0.5, {
+            'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
+        }));
+        res.status(200).send('User ' + req.body.user_id + ' viewed portion from ' + req.body.item_id);
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -169,12 +182,13 @@ router.post('/view', async (req, res, next) => {
 
 router.post('/rating', async (req, res, next) => {
     let rating = (Number.parseFloat((parseInt(req.body.rating) - 3) / 2).toFixed(2));
-    log.info('rating', rating);
+    log.info('rating', req.body);
     try {
         await client.send(new rqs.AddRating(req.body.user_id, req.body.item_id, rating, {
-            'cascadeCreate': true
+            'cascadeCreate': true,
+            'recommId': req.body.recomm_id,
         }));
-        res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id);
+        res.status(200).send('User ' + req.body.user_id + ' rated ' + req.body.item_id + ' with ' + rating + ' Star(s)');
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -202,7 +216,6 @@ router.post('/cart', async (req, res, next) => {
 //ITEMS to USER
 router.get('/', async (req, res) => {
     let options = req.query;
-    console.log(options);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToUser(options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
@@ -211,7 +224,7 @@ router.get('/', async (req, res) => {
             'minRelevance': options.relevance || 'low',
             'diversity': options.diversity || 0.0,
         }));
-        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms, recommended_items.recommId));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -220,7 +233,6 @@ router.get('/', async (req, res) => {
 //ITEMS to ITEM
 router.get('/itemstoitem', async (req, res) => {
     let options = req.query;
-    console.log(options);
     try {
         let recommended_items = await client.send(new rqs.RecommendItemsToItem(options.item_id, options.user_id, parseInt(options.count) || 10, {
             'cascadeCreate': true,
@@ -229,7 +241,7 @@ router.get('/itemstoitem', async (req, res) => {
             'minRelevance': options.relevance || 'low',
             'diversity': options.diversity || 0.0,
         }));
-        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms));
+        res.status(200).send(sanitizeRecommendedItems(recommended_items.recomms, recommended_items.recommId));
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }
@@ -245,15 +257,12 @@ function sanitizeItems(items, items_ids) {
     });
 }
 
-function sanitizeRecommendedItems(items) {
-    return items.map((item) => {
-        let id = item.id;
-        return {id, ...item.values}
-    });
+function sanitizeRecommendedItems(items, recomm_id) {
+    return items.map((item) => ({recomm_id, id: item.id, ...item.values}));
 }
 
 function isID(prop) {
-    return prop === 'id' || prop === 'tmdb_id';
+    return prop === 'id' || prop === '_id' || prop === 'tmdb_id';
 }
 
 module.exports = router;

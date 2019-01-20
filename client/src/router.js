@@ -33,7 +33,10 @@ export default new Router({
             path: '/movie/:id',
             name: 'movie',
             component: MovieDetails,
-            props: true
+            //props: true,
+            props(route) {
+                return  {...route.query || {}, ...route.params}
+            }
         },
     ]
 })

@@ -14,25 +14,32 @@ export default new Vuex.Store({
         },
         movies: [],
         expanded_card: '',
+        relevance: 'medium',
+        diversity: 0.5,
     },
     getters: {
         isLoggedIn: () => !!localStorage.getItem("jwtToken"),
         user: (state) => state.user,
         movies: (state) => state.movies,
         expanded_card: (state) => state.expanded_card,
+        relevance: (state) => state.relevance,
+        diversity: (state) => state.diversity,
     },
 
     mutations: {
         login: (state, user) => state.user = user,
+        logout: (state) => state.user = {},
         setMovies: (state, movies) => state.movies = movies,
         setExpandedCard: (state, index) => state.expanded_card = index,
+        setRelevance: (state, relevance) => state.relevance = relevance,
+        setDiversity: (state, diversity) => state.diversity = diversity,
     },
     actions: {
         login({commit}, credentials) {
             return login(credentials)
                 .then(response => {
                     commit('login', response.data);
-                    console.log(response);
+                    console.log(response.data);
                     axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
                     localStorage.setItem("jwtToken", response.data.token);
                     localStorage.setItem("name", response.data.name);
@@ -43,11 +50,17 @@ export default new Vuex.Store({
                     throw error;
                 });
         },
-        async signup({commit}, credentials) {
+        logout({commit}) {
+            commit('logout');
+            localStorage.setItem("jwtToken", '');
+            localStorage.setItem("name", '');
+            localStorage.setItem("id", '');
+        },
+        async signup({dispatch, commit}, credentials) {
             try {
                 let response = await signup(credentials);
                 console.log(response.data);
-                return commit('login', credentials)
+                return dispatch('login', credentials);
             } catch (error) {
                 console.error(error);
                 throw error
@@ -56,6 +69,12 @@ export default new Vuex.Store({
 
         setMovies({commit}, movies) {
             commit('setMovies', movies);
+        },
+        setRelevance({commit}, relevance) {
+            commit('setRelevance', relevance);
+        },
+        setDiversity({commit}, diversity) {
+            commit('setDiversity', diversity);
         },
         setExpandedCard({commit}, index) {
             commit('setExpandedCard', index);

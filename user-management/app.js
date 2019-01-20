@@ -2,6 +2,7 @@ let express = require('express');
 let path = require('path');
 const bodyParser = require('body-parser');
 let logger = require('morgan');
+const axios = require('axios');
 let cors = require('cors');
 let corsOptions = {
     origin: '*',
@@ -56,6 +57,10 @@ passport.use('signup', new LocalStrategy({
                     log.error('login strategy insert', 'some error while inserting user');
                     return done(null, false, {message: 'some error while inserting user'});
                 }
+                console.log(result.ops);
+                axios.post('http://localhost:3000/recommendation/users', result.ops)
+                    .then(res => console.log(res.data))
+                    .catch(err => console.error(err.data));
                 return done(null, result, {message: 'Created in Successfully'});
             });
         })

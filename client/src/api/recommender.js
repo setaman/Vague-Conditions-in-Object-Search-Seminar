@@ -16,7 +16,7 @@ export function getRecommendedItems (user_id, count = 10, scenario = 'homepage',
     });
 }
 
-export function getItemsToItem (item_id, user_id, count = 10, scenario = 'homepage', relevance = 'low', diversity = 0.0){
+export function getItemsToItem (item_id, user_id, count = 10, scenario = 'homepage', relevance = 'low', diversity = 0.5){
     return axios.get('http://localhost:3000/recommendation/itemstoitem', {
         params: {
             item_id,
@@ -43,14 +43,10 @@ export function signup (credentials){
     });
 }
 
-
 /**
  * INTERACTION
  * */
-export function callInteraction(action, {user_id, item_id, rating}) {
-    return axios.post(`http://localhost:3000/recommendation/${action}`, {
-        user_id,
-        item_id,
-        rating,
-    });
+export function callInteraction(action, options) {
+    console.log('OPTIONS', options);
+    return axios.post(`http://localhost:3000/recommendation/${action}`, {...options});
 }

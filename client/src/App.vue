@@ -1,6 +1,6 @@
 <template>
   <v-app >
-    <navigation-bar/>
+    <navigation-bar v-if="user"/>
     <v-content>
       <router-view/>
     </v-content>
@@ -13,9 +13,10 @@ import NavigationBar from "./components/Base/NavigationBar";
 export default {
   name: 'App',
     components: {NavigationBar},
-    data () {
-    return {
-      //
+    data: ()=>({}),
+  computed:{
+    user() {
+      return this.$store.getters.user.name;
     }
   }
 }
