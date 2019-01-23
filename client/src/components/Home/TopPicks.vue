@@ -9,7 +9,11 @@
                     :indeterminate="true"
             ></v-progress-linear>
         </v-flex>
-        <v-flex xs12>
+        <v-flex xs12 sm12 md6 offset-xs0 offset-sm0 offset-md3
+                v-if="recommended.length === 0 && !is_loading">
+            <no-movies text="Sorry, no movies to recommend"/>
+        </v-flex>
+        <v-flex xs12 v-else>
             <movies-list-container>
                 <movie-item-horizontal v-for="(movie, i) in recommended" :key="i" :movie="movie" :recomm_id="recomm_id"/>
             </movies-list-container>
@@ -24,10 +28,11 @@
     import SectionHeader from "@/components/Home/SectionHeader";
     import MovieItemHorizontal from "@/components/Movie/MovieItemHorizontal";
     import MoviesListContainer from "../Movie/MoviesListContainer";
+    import NoMovies from "../Base/NoMovies";
 
     export default {
         name: "TopPicks",
-        components: {MoviesListContainer, MovieItemHorizontal, SectionHeader},
+        components: {NoMovies, MoviesListContainer, MovieItemHorizontal, SectionHeader},
         data:()=>({
            recommended_movies: [],
             is_loading: false,

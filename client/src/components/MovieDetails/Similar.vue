@@ -9,7 +9,11 @@
                     :indeterminate="true"
             ></v-progress-linear>
         </v-flex>
-        <v-flex xs12>
+        <v-flex xs12 sm12 md6 offset-xs0 offset-sm0 offset-md3
+                v-if="recommended.length === 0 && !is_loading">
+            <no-movies text="Sorry, no movies to recommend"/>
+        </v-flex>
+        <v-flex xs12 v-else>
             <movies-list-container>
                <movie-item-horizontal v-for="(movie, i) in recommended" :key="i" :movie="movie" :recomm_id="recomm_id"/>
             </movies-list-container>
@@ -23,10 +27,11 @@
     import SectionHeader from "../Home/SectionHeader";
     import {getItemsToItem} from "@/api/recommender";
     import {getMovieById} from "../../api/movies";
+    import NoMovies from "../Base/NoMovies";
 
     export default {
         name: "Similar",
-        components: {SectionHeader, MovieItemHorizontal, MoviesListContainer},
+        components: {NoMovies, SectionHeader, MovieItemHorizontal, MoviesListContainer},
         props:['id'],
         data:()=>({
             recommended_movies: [],
