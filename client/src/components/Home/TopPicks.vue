@@ -41,7 +41,6 @@
 
                     if (!recommended.data.length > 0) {
                         this.recommended_movies = [];
-                        console.log('no RECOMMS !!!!');
                         return;
                     }
 
@@ -55,9 +54,6 @@
                     this.recommended_movies.push(...result.map(res => {
                         if(res.data.length>0) return {...res.data[0]._fields[0].properties, recomm_id: recommended.data[0].recomm_id};
                     }));
-
-                    //console.log(this.recommended_movies);
-
                 } catch (e) {
                     console.error(e);
                 } finally {
@@ -77,8 +73,6 @@
                 return this.recommended_movies;
             },
             recommendationProperties() {
-                console.log(this.$store.getters.relevance);
-                console.log(this.$store.getters.diversity);
                 this.recommendItemsToUser();
                 return '';
             },

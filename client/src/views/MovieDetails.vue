@@ -21,6 +21,7 @@
     import Similar from "../components/MovieDetails/Similar";
     import TopPicks from "../components/Home/TopPicks";
     import BtnPrim from "../components/Base/BtnPrim";
+    import logger from '@/interactions_logger'
 
     import {callInteraction} from "../api/recommender";
 
@@ -47,15 +48,14 @@
                 try {
                     let response = await getMovieById(this.id);
                     this.movie = response.data[0]._fields[0].properties;
-                    //console.log(response.data[0]._fields[0].properties);
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }
             },
             getDuration(){
-                console.log(((timer.ms / 1000).toFixed(0)));
+                //console.log(((timer.ms / 1000).toFixed(0)));
                 return (timer.ms / 1000).toFixed(0);
             },
             detailView() {
@@ -65,7 +65,7 @@
                     recomm_id : this.recomm_id,
                     duration : this.getDuration(),
                 })
-                    .then(res => console.log(res.data))
+                    .then(res => logger('detail view', res.data))
                     .catch(err => console.log(err.data));
             }
         },

@@ -132,6 +132,7 @@
     import GenreTag from "@/components/Movie/GenreTag";
     import CrewPerson from "@/components/Movie/CrewPerson";
     import PopularityCircle from "../Base/PopularityCircle";
+    import logger from '@/interactions_logger'
 
     export default {
         name: "Description",
@@ -157,7 +158,7 @@
                         this.cast = res.data.cast.slice(0,5);
                     }
                 }catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }
@@ -174,14 +175,14 @@
                         item_id: this.movie.tmdb_id,
                         recomm_id: this.recomm_id
                     })
-                        .then(res => console.log(res.data))
+                        .then(res => logger('bookmark',res.data))
                         .catch(e => console.log(e));
                 }
                 this.favorite = !this.favorite;
             },
             removeBookmark() {
                 callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
-                    .then(res => console.log(res.data))
+                    .then(res => logger('removed bookmark',res.data))
                     .catch(e => console.log(e));
             },
             rate() {
@@ -191,7 +192,7 @@
                     rating: this.rating,
                     recomm_id : this.recomm_id,
                 })
-                    .then(res => console.log(res.data))
+                    .then(res => logger('rating',res.data))
                     .catch(err => console.error(err.data));
             },
             purchase() {
@@ -206,7 +207,7 @@
                         this.purchase_successful = true;
                         this.purchased = true;
                         this.purchase_response = res.data;
-                        console.log(res.data)
+                        logger('purchase',res.data)
                     })
                     .catch(e => console.error(e.data));
             }

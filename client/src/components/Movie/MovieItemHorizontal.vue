@@ -43,6 +43,7 @@
     import PopularityCircle from "../Base/PopularityCircle";
     import MovieInfo from "./MovieInfo";
     import {callInteraction} from "../../api/recommender";
+    import logger from '@/interactions_logger'
 
     export default {
         name: "MovieItemHorizontal",
@@ -82,14 +83,14 @@
                         item_id: this.movie.tmdb_id,
                         recomm_id: this.recomm_id
                     })
-                        .then(res => console.log(res.data))
-                        .catch(e => console.log(e));
+                        .then(res => logger('bookmark',res.data))
+                        .catch(e => console.error(e));
                 }
                 this.favorite = !this.favorite;
             },
             removeBookmark() {
                 callInteraction('removebookmark', {user_id: this.$store.getters.user.id, item_id: this.movie.tmdb_id})
-                    .then(res => console.log(res.data))
+                    .then(res => logger('removed bookmark',res.data))
                     .catch(e => console.log(e));
             },
             portionView() {
@@ -98,7 +99,7 @@
                     item_id: this.movie.tmdb_id,
                     recomm_id : this.recomm_id,
                 })
-                    .then(res => console.log(res.data))
+                    .then(res => logger('portion view',res.data))
                     .catch(e => console.log(e));
             },
         },

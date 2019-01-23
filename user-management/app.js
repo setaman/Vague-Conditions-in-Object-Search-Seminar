@@ -30,6 +30,7 @@ const client = new MongoClient('mongodb://localhost:27017/users', {
 client.connect(function (err) {
     if (err) {
         log.error('mongo', 'Can not connect to db');
+        throw err;
     } else {
         log.info('mongo', 'Connected successful to mongo!');
         db = client.db(dbName);

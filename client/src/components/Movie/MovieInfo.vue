@@ -81,6 +81,7 @@
 </template>
 
 <script>
+    import logger from '@/interactions_logger.js';
     import {getCredits} from "@/api/movies";
     import CrewPerson from "./CrewPerson";
     import GenreTag from "./GenreTag";
@@ -108,7 +109,7 @@
                         this.cast = res.data.cast.slice(0, 4);
                     }
                 }catch (e) {
-                    console.log(e);
+                    console.error(e);
                 } finally {
                     this.is_loading = false;
                 }
@@ -125,7 +126,7 @@
                         this.purchase_successful = true;
                         this.purchased = true;
                         this.purchase_response = res.data;
-                        console.log(res.data)
+                        logger('purchase', res.data);
                     })
                     .catch(e => console.error(e.data));
             }
@@ -137,7 +138,6 @@
         computed: {
            wasExpanded(){
                if (this.expanded && this.cast.length < 1) {
-                   console.log('LOAD');
                    this.getCast();
                }
                return '';

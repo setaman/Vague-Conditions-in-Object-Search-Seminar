@@ -37,11 +37,12 @@ services:
   # ####################################################################################################################
   # User Management service
   # ####################################################################################################################
-#  usermanagement:
-#    build:
-#      context: user-management
-#    container_name: "users"
-#    ports:
-#      - 3001:3001
-#    depends_on:
-#      - mongo
+  usermanagement:
+    restart: always
+    build:
+      context: user-management
+    container_name: "users"
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongo
