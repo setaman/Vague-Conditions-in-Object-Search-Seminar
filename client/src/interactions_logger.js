@@ -3,7 +3,7 @@ export default (interaction, text) => {
                                                             font-weight: bold; 
                                                             font-family: "Montserrat"; 
                                                             font-size: 30px; 
-                                                            background-color: #00FA9A;
+                                                            background-color: #AFEEEE;
                                                             padding:12px;
                                                             margin-top: 20px`,
                                                             `color: white; 
