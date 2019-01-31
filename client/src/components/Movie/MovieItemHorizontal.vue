@@ -1,7 +1,7 @@
 <template>
     <div class="movie">
         <div class="movie-h-container elevation-5" :class="{expand: expanded}">
-            <router-link class="to-details" target="_blank"
+            <router-link class="to-details"
                          :recomm_id="recomm_id"
                          :to="{ name: 'movie', params: { id: movie.tmdb_id}, query: {recomm_id}}">
 

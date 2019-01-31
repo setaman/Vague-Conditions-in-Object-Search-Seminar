@@ -4,7 +4,6 @@
     <search-input/>
     <result-list v-if="movies.length > 0"/>
     <top-picks/>
-    <foot/>
   </v-container>
 
 </template>

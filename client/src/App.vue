@@ -4,15 +4,17 @@
     <v-content>
       <router-view/>
     </v-content>
+    <foot/>
   </v-app>
 </template>
 
 <script>
 
 import NavigationBar from "./components/Base/NavigationBar";
+import Foot from "./components/Foot";
 export default {
   name: 'App',
-    components: {NavigationBar},
+    components: {Foot, NavigationBar},
     data: ()=>({}),
   computed:{
     user() {
