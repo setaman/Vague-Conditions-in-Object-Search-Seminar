@@ -16,7 +16,18 @@
                 {{price}}$
             </span>
             <div class="popularity">
-                <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
+                <vue-ellipse-progress :progress="popularityProgress()" :size="35"
+                                      color="white"
+                                      :thickeness="2"
+                                      empty-color="black"
+                                      empty-color-fill="rgba(0, 0, 0, 0.38)"
+                                      :animation="{
+                                        type: 'rs',
+                                        duration: 500,
+                                        delay: 500
+                                      }"
+                                      font-color="white"
+                                      :legend-value="parseFloat(movie.vote_average.toFixed(1))"/>
             </div>
             <div class="bookmark">
                 <v-btn icon flat color="error" @click="bookmark()">
@@ -65,6 +76,9 @@
                     this.portionView();
                     this.$store.dispatch('setExpandedCard', this.movie.tmdb_id);
                 }
+            },
+            popularityProgress() {
+                return parseFloat((this.movie.vote_average * 100 / 10).toFixed(1));
             },
             generatePrise() {
                 this.price = (Math.random() * (20 - 1) + 1).toFixed(2);

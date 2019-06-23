@@ -13,7 +13,18 @@
                         </v-img>
 
                         <div class="popularity">
-                            <popularity-circle :popularity="movie.vote_average.toFixed(1)"/>
+                            <vue-ellipse-progress :progress="popularityProgress()" :size="35"
+                                                  color="white"
+                                                  :thickeness="2"
+                                                  empty-color="black"
+                                                  empty-color-fill="rgba(0, 0, 0, 0.38)"
+                                                  :animation="{
+                                        type: 'rs',
+                                        duration: 500,
+                                        delay: 500
+                                      }"
+                                                  font-color="white"
+                                                  :legend-value="parseFloat(movie.vote_average.toFixed(1))"/>
                         </div>
 
                         <div class="bookmark">
@@ -150,6 +161,9 @@
             purchase_response: '',
         }),
         methods: {
+            popularityProgress() {
+                return parseFloat((this.movie.vote_average * 100 / 10).toFixed(1));
+            },
             async getCast() {
                 try {
                     let res = await getCredits(this.movie.tmdb_id);
