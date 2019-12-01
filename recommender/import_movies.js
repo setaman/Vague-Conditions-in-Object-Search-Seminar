@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
 const movies = JSON.parse(fs.readFileSync('./movies/neo4j.json'));
-const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee_100s_2.json'));
+const movies_recombee = JSON.parse(fs.readFileSync('./movies/recombee_100_chunks_v2.json'));
 const log = require('./logger');
 
 /*let promises = movies.map(movie => axios.post('http://localhost:3000/movies', movie));
@@ -106,7 +106,7 @@ let sanitized_movies = movies_recombee.map(movie => {
 });
 */
 
-/*fs.writeFile(`./movies/recombee_100s_2.json`, JSON.stringify(m_100s), 'utf8', (err, data) => {
+/*fs.writeFile(`./movies/recombee_100_chunks_v2.json`, JSON.stringify(m_100s), 'utf8', (err, data) => {
     if (err) console.log('ERROR while writing', err);
     else console.log('WRITE successful');
 });*/

@@ -101,13 +101,13 @@ router.post('/users/properties', async (req, res, next) => {
 
 router.post('/users', async (req, res, next) => {
     let requests = req.body.map((user) => {
-        let id = user._id;
+        let id = user.id;
 
         return new rqs.SetUserValues(id, {name: user.name}, {'cascadeCreate': true});
     });
     try {
         await client.send(new rqs.Batch(requests));
-        res.status(200).send('User values added!');
+        res.status(200).send('User  added!');
     } catch (e) {
         res.status(500).send('Something is wrong' + e);
     }

@@ -3,6 +3,12 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let cors = require('cors');
+const dotenv = require('dotenv');
+
+if(!process.env.RECOMBEE_DB) {
+    dotenv.config();
+}
+
 let app = express();
 
 let recombee = require('./routes/recombee');

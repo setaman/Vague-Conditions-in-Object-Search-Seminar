@@ -48,25 +48,31 @@ passport.use('signup', new LocalStrategy({
                 return done(null, false, {message: 'Error occurred'});
             }
             if (user) {
-                log.warn('login strategy', 'user already exist');
+                log.warn('signup strategy', 'user already exist');
                 return done(null, false, {message: 'user already exist'});
             }
 
-            db.collection('users').insertOne({name, password}, (err, result) => {
+            db.collection('users').insertOne({name, password}, async (err, result) => {
                 if (err) {
-                    log.error('login strategy insert', 'some error while inserting user');
+                    log.error('signup strategy insert', 'some error while inserting user');
                     return done(null, false, {message: 'some error while inserting user'});
                 }
-                console.log(result.ops);
-                axios.post('http://localhost:3000/recommendation/users', result.ops)
-                    .then(res => console.log(res.data))
-                    .catch(err => console.error(err.data));
-                return done(null, result, {message: 'Created in Successfully'});
+                try {
+                    await axios.post('http://localhost:3000/recommendation/users', [{
+                            name: result.ops[0].name,
+                            id: result.ops[0]._id
+                        }]
+                    );
+                    return done(null, result, {message: 'Created user'});
+                } catch (e) {
+                    console.error(e);
+                    return done(null, false, {message: 'Error while adding new user to recombee'});
+                }
+
             });
         })
     }
 ));
-
 
 passport.use('login', new LocalStrategy({
         usernameField: 'name',
