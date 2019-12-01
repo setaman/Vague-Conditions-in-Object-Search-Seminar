@@ -34,6 +34,19 @@ module.exports.searchMovies = (req, res) => {
         .finally(() => session.close())
 };
 
+module.exports.countMovies = (req, res) => {
+    session
+        .run('MATCH (n:Movie) RETURN count(n) as count')
+        .then(result => {
+            res.status(200).type('application/json').send(result.records);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).type('application/json').send({err});
+        })
+        .finally(() => session.close())
+};
+
 module.exports.getMovieById = (req, res) => {
     console.log(req.params.tmdb);
     session

@@ -1,4 +1,3 @@
-console.log(process.env.RECOMBEE_DB);
 module.exports = {
     neo4j_user: 'neo4j',
     neo4j_pass: 'admin',

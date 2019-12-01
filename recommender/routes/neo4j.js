@@ -10,6 +10,10 @@ router.get('/search/', (req, res) => {
   neo4j.searchMovies(req, res);
 });
 
+router.get('/count/', (req, res) => {
+  neo4j.countMovies(req, res);
+});
+
 router.post('/', (req, res) =>{
   neo4j.addMovie(req, res);
 });
