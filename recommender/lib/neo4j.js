@@ -48,7 +48,6 @@ module.exports.countMovies = (req, res) => {
 };
 
 module.exports.getMovieById = (req, res) => {
-    console.log(req.params.tmdb);
     session
         .run('MATCH (movie:Movie) \
                 WHERE movie.tmdb_id = {id} RETURN movie',
@@ -80,7 +79,6 @@ module.exports.addBookmarkRelation = (req, res) => {
 };
 
 module.exports.getBookmarkRelation = (req, res) => {
-    console.log(req.query.user_id);
     session
         .run('MATCH (u:User {id: {user_id}})-[:BOOKMARK]->(m:Movie) RETURN m;',
             {user_id: req.query.user_id})

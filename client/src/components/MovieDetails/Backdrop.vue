@@ -35,7 +35,6 @@
         methods: {
             onScroll (e) {
                 this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
-                //console.log(1 - ((this.offsetTop/2)/100).toFixed(1));
             }
         },
         computed:{

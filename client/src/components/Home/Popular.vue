@@ -1,7 +1,5 @@
 <template>
     <v-layout row wrap class="popular-container">
-        <section-header header="Popular"/>
-
         <v-flex xs12 sm6>
             <v-img
                     class="movie-poster"
@@ -57,10 +55,9 @@
 </template>
 
 <script>
-    import SectionHeader from "./SectionHeader";
     export default {
         name: "Popular",
-        components: {SectionHeader}
+        components: {}
     }
 </script>
 

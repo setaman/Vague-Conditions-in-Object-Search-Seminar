@@ -1,10 +1,6 @@
 <template>
-    <footer id="footer" class="elevation-20">
+    <footer id="footer" class="elevation-0">
         <v-layout row wrap>
-            <!--<v-flex xs12 sm6>
-                <section-header header="Movie Recommender System"/>
-            </v-flex>-->
-
             <v-flex xs12 class="text-xs-center">
                 <section-header header="Powered by"/>
             </v-flex>
@@ -20,7 +16,6 @@
                 </a>
             </v-flex>
         </v-layout>
-
     </footer>
 </template>
 
@@ -35,6 +30,10 @@
 <style scoped lang="scss">
     #footer {
         padding: 150px 0;
+        position: relative;
+        z-index: 5;
+        background: #18263a;
+        margin-top: 100px;
     }
     .logo {
         text-align: center;
