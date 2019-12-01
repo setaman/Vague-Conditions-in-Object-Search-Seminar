@@ -11,6 +11,8 @@ services:
       - 27017:27017
     volumes:
       - /data/users
+    networks:
+      - mongo_net
 
   # ####################################################################################################################
   # Recommender service
@@ -19,6 +21,10 @@ services:
     build:
       context: recommender
     container_name: "recommender"
+    env_file:
+      - ./creds.env
+    networks:
+      - neo4j_net
     ports:
       - 3000:3000
 
@@ -33,16 +39,26 @@ services:
       - "7687:7687"
     volumes:
       - ./db/dbms:/data/dbms
+    networks:
+      - neo4j_net
 
-  # ####################################################################################################################
-  # User Management service
-  # ####################################################################################################################
+   ####################################################################################################################
+   #User Management service
+   ####################################################################################################################
   usermanagement:
-    restart: always
     build:
       context: user-management
     container_name: "users"
+    restart: always
     ports:
       - 3001:3001
+    links:
+      - mongo
     depends_on:
       - mongo
+    networks:
+      - mongo_net
+
+networks:
+  mongo_net:
+  neo4j_net:
