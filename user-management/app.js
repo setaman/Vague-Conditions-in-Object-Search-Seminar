@@ -8,6 +8,7 @@ let corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
 };
+const mongoHost = process.env.MONGO_HOST || "localhost";
 const MongoClient = require('mongodb').MongoClient;
 const log = require('./logger');
 
@@ -21,7 +22,7 @@ let db;
 
 const dbName = 'usersDb';
 
-const client = new MongoClient('mongodb://localhost:27017/users', {
+const client = new MongoClient(`mongodb://${mongoHost}:27017/users`, {
     useNewUrlParser: true,
     reconnectTries: 10,
     reconnectInterval: 2000,

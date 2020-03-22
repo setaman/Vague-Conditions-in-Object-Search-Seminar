@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 services:
 
   # ####################################################################################################################
@@ -21,8 +21,10 @@ services:
     build:
       context: recommender
     container_name: "recommender"
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
     env_file:
-      - ./creds.env
+      - ./recommender/creds.env
     networks:
       - neo4j_net
     ports:
@@ -32,8 +34,10 @@ services:
     # Neo4j
     # ####################################################################################################################
   neo4j:
-    container_name: "neo4jdb"
     image: neo4j:latest
+    container_name: "neo4jdb"
+    environment:
+      NEO4J_AUTH: neo4j/admin
     ports:
       - "7474:7474"
       - "7687:7687"
@@ -49,11 +53,11 @@ services:
     build:
       context: user-management
     container_name: "users"
+    environment:
+      - MONGO_HOST=mongo
     restart: always
     ports:
       - 3001:3001
-    links:
-      - mongo
     depends_on:
       - mongo
     networks:

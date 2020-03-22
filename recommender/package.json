@@ -15,7 +15,7 @@
     "dotenv": "^8.2.0",
     "express": "~4.16.0",
     "morgan": "~1.9.0",
-    "neo4j-driver": "^1.7.2",
+    "neo4j-driver": "^4.0.2",
     "recombee-api-client": "^2.2.0"
   }
 }

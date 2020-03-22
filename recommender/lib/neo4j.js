@@ -1,7 +1,8 @@
 const credentials = require('../creds');
-const neo4j = require('neo4j-driver').v1;
+const neo4j = require('neo4j-driver');
 
-const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic(credentials.neo4j_user, credentials.neo4j_pass));
+const neo4jUri = process.env.NEO4J_URI || "bolt://localhost:7687";
+const driver = neo4j.driver(neo4jUri, neo4j.auth.basic(credentials.neo4j_user, credentials.neo4j_pass));
 const session = driver.session();
 
 module.exports.addMovie = (req, res) => {
@@ -19,10 +20,11 @@ module.exports.addMovie = (req, res) => {
 };
 
 module.exports.searchMovies = (req, res) => {
+    const session = driver.session({});
     session
-        .run('MATCH (movie:Movie) \
-                WHERE movie.title =~ {title} OR movie.original_title =~ {title}  \
-                RETURN movie',
+        .run(`MATCH (movie:Movie)
+                WHERE movie.title =~ $title OR movie.original_title =~ $title 
+                RETURN movie`,
             {title: '(?i).*' + req.query.title + '.*'})
         .then(result => {
             res.status(200).type('application/json').send(result.records);
