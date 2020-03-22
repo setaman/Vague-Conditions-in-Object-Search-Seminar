@@ -37,32 +37,11 @@ Movies Context Based Recommendation demo for aggregated movies set from Kaggle a
 6. Go to `localhost:8080`, create new user and enjoy   
 
 
-### Run services separated
-
-Start client:
-```
-cd client
-npm run serve
-```
-
-Start recommender: 
-```
-cd client
-npm run start
-```
-
-Start mongoDB instance:
-```
-sudo docker run --name users-db -e MONGO_INITDB_DATABASE=users mongo:latest
-```
-
-Start user management
-```
-cd user-management
-npm run start
-```
-Start neo4j - (`localhost:7474/ neo4j:neo4j`): 
+### Notes
+Neo4j UI on `localhost:7474`
 
 ```
-docker run --publish=7474:7474 --publish=7687:7687 --volume=$HOME/neo4j/data:/data --volume=$HOME/neo4j/logs:/logs neo4j:latest
-```
+URL: bolt://localhost/7687
+USER: neo4j
+PASSWORD: admin
+``` 
