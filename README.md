@@ -1,6 +1,17 @@
 # Vague-Conditions-in-Object-Search-Seminar
 Movies Context Based Recommendation demo for aggregated movies set from Kaggle and THMD using Recombee under the hood.
 
+##### Technology Stack (only for learning purpose ):
++ Docker-Compose
++ Node.js
++ Vue.js + Vuetify.js
++ JWT for authentication
++ Mongodb
++ Neo4j
++ [Recombee](https://www.recombee.com/) (Recommender as a Service)
++ [TMDB](https://www.themoviedb.org/) (Movies additional data)
++ [Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset) (Movies data set)
+
 ## Docker Compose up and running
 1. Create accounts by [Recombee](https://www.recombee.com/) and [TMDB](https://www.themoviedb.org/)
 2. Create `creds.env` in `recommender/`
