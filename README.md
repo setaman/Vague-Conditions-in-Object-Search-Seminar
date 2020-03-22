@@ -1,24 +1,30 @@
 # Vague-Conditions-in-Object-Search-Seminar
-Context Based Recommendation demo
+Movies Context Based Recommendation demo for aggregated movies set from Kaggle and THMD using Recombee under the hood.
 
-### Creds
+## Docker Compose up and running
+1. Create accounts by [Recombee](https://www.recombee.com/) and [TMDB](https://www.themoviedb.org/)
+2. Create `creds.env` in `recommender/`
+    ```dotenv
+    RECOMBEE_DB=db_name
+    RECOMBEE_TOKEN=token
+    TMDB_API_KEY=api_key
+    ```
+3. Import movie data using the script (comming soon)
+    ```
+   cd recommeder
+   node importMovies.js
+    ```   
+4. Run the system
+    ```
+    docker-compose up -d 
+    ```
+5. Run the client (not dockerized yet )
+    ```
+    cd client
+    npm run serve
+    ``` 
+6. Go to `localhost:8080`, create new user and enjoy   
 
-`/recommender/creds.js`
-
-```javascript
-module.exports = {
-    neo4j_user: 'neo4j',
-    neo4j_pass: 'admin',
-    recommbe_db: 'database_name',
-    recommbe_token: 'token',
-    tmdb_key: 'api_key',
-};
-```
-
-### Run services with docker-compose
-```
-sudo docker-compose up -d
-```
 
 ### Run services separated
 
